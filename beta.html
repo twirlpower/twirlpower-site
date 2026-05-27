@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TwirlPower — Join the Beta</title>
+  <meta name="description" content="TwirlPower is coming soon. Sign up to be notified when we launch and join our beta testing program." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #0d9488; --teal-dark: #0f766e; --teal-light: #ccfbf1;
+      --pink: #e11d6a; --navy: #0f172a; --navy2: #1e293b;
+      --slate: #475569; --muted: #94a3b8;
+      --border: #e2e8f0; --bg: #f8fafc; --card: #ffffff; --radius: 14px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--navy);
+      background: var(--navy);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1,h2,h3 { font-family: 'DM Serif Display', serif; line-height: 1.15; }
+    a { text-decoration: none; color: inherit; }
+
+    /* BG */
+    .page-bg {
+      min-height: 100vh;
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .page-bg::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 80% -10%, rgba(13,148,136,.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 5% 90%, rgba(225,29,106,.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(13,148,136,.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* NAV */
+    .nav {
+      position: relative;
+      z-index: 10;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: #fff;
+    }
+    .nav-logo span { color: var(--pink); }
+    .nav-back {
+      font-size: 13px;
+      color: var(--muted);
+      transition: color .15s;
+    }
+    .nav-back:hover { color: #fff; }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .content-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1000px;
+      width: 100%;
+      align-items: center;
+    }
+
+    /* LEFT SIDE */
+    .left { color: #fff; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13,148,136,.15);
+      color: #5eead4;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 99px;
+      border: 1px solid rgba(13,148,136,.25);
+      margin-bottom: 24px;
+    }
+    .eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #5eead4;
+    }
+
+    .hero-title {
+      font-size: clamp(34px, 4.5vw, 52px);
+      color: #fff;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+    .hero-title span { color: var(--teal); }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 460px;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .feature-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(13,148,136,.2);
+      color: #5eead4;
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* BATON SVG */
+    .baton-wrap {
+      margin-top: 32px;
+      opacity: .4;
+    }
+
+    /* RIGHT SIDE — FORM CARD */
+    .form-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 20px;
+      padding: 40px 36px;
+      backdrop-filter: blur(12px);
+    }
+
+    .form-title {
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .form-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.55;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .form-input,
+    .form-select {
+      width: 100%;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: #fff;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,.3); }
+    .form-input:focus,
+    .form-select:focus { border-color: var(--teal); }
+    .form-select option { background: var(--navy2); color: #fff; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--teal);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .checkbox-label {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+    .checkbox-label strong { color: #fff; }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--teal);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background .15s, transform .15s;
+      box-shadow: 0 4px 20px rgba(13,148,136,.35);
+    }
+    .submit-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* SUCCESS STATE */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(13,148,136,.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 28px;
+    }
+    .success-state h3 {
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .success-state p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ERROR */
+    .form-error {
+      display: none;
+      background: rgba(225,29,106,.1);
+      border: 1px solid rgba(225,29,106,.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #fda4af;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 840px) {
+      .content-wrap { grid-template-columns: 1fr; gap: 48px; }
+      .left { text-align: center; }
+      .features { align-items: flex-start; text-align: left; }
+      .eyebrow { margin: 0 auto 24px; }
+      .hero-sub { max-width: 100%; }
+      .baton-wrap { display: none; }
+    }
+    @media (max-width: 480px) {
+      .form-card { padding: 28px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-bg">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+    <a href="/" class="nav-back">← Back to site</a>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="content-wrap">
+
+      <!-- LEFT -->
+      <div class="left">
+        <div class="eyebrow">Coming Soon</div>
+        <h1 class="hero-title">
+          The platform for<br>competitive<br>
+          <span>baton twirling.</span>
+        </h1>
+        <p class="hero-sub">
+          TwirlPower is finishing up development and will be opening for beta testing soon. Sign up to be the first to know — and let us know if you'd like to help shape the platform.
+        </p>
+        <div class="features">
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>Classification tracking across USTA, NBTA, TU, and DMA</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>Twirl Tracker — competition-day dashboard with real-time progress</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>Online competition registration for families</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>Full competition management platform for directors</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>Coach roster management and advancement alerts</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>Installable on iOS and Android</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — FORM -->
+      <div class="form-card">
+
+        <!-- Form -->
+        <div id="form-wrap">
+          <h2 class="form-title">Get early access</h2>
+          <p class="form-sub">Sign up to be notified when TwirlPower opens for beta testing.</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="f-name">First Name</label>
+              <input class="form-input" type="text" id="f-name" placeholder="Emma" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-last">Last Name</label>
+              <input class="form-input" type="text" id="f-last" placeholder="Smith" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-email">Email Address</label>
+            <input class="form-input" type="email" id="f-email" placeholder="you@example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-role">I am a...</label>
+            <select class="form-select" id="f-role">
+              <option value="">Select your role</option>
+              <option value="family">Family / Parent of a twirler</option>
+              <option value="coach">Coach or Studio Owner</option>
+              <option value="director">Competition Director</option>
+              <option value="twirler">Twirler (competing independently)</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-org">Primary Organization (optional)</label>
+            <select class="form-select" id="f-org">
+              <option value="">Select an org</option>
+              <option value="USTA">USTA</option>
+              <option value="NBTA">NBTA</option>
+              <option value="TU">Twirling Unlimited (TU)</option>
+              <option value="DMA">DMA</option>
+              <option value="multiple">Multiple orgs</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="f-beta" />
+              <label class="checkbox-label" for="f-beta">
+                <strong>I'd like to help beta test TwirlPower</strong> — I'm open to trying early features and sharing feedback.
+              </label>
+            </div>
+          </div>
+
+          <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">
+            Notify Me When It's Ready →
+          </button>
+
+          <div class="form-error" id="form-error"></div>
+          <p class="form-note">No spam. We'll only email you about TwirlPower launch news.</p>
+        </div>
+
+        <!-- Success State -->
+        <div class="success-state" id="success-state">
+          <div class="success-icon">🎉</div>
+          <h3>You're on the list!</h3>
+          <p>Thanks for signing up. We'll reach out as soon as TwirlPower opens for beta testing.<br><br>In the meantime, check out the <a href="https://directory.twirlpower.com" style="color:var(--teal);">competition directory</a> — it's already live.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://fascxnrrnsknjnojfxvv.supabase.co';
+  window.TWIRLPOWER_ANON_KEY = 'YOUR_ANON_KEY_HERE';
+
+  async function handleSubmit() {
+    const btn = document.getElementById('submit-btn');
+    const errorEl = document.getElementById('form-error');
+
+    const name = document.getElementById('f-name').value.trim();
+    const last = document.getElementById('f-last').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const role = document.getElementById('f-role').value;
+    const org = document.getElementById('f-org').value;
+    const wantsBeta = document.getElementById('f-beta').checked;
+
+    // Validate
+    if (!name) { showError('Please enter your first name.'); return; }
+    if (!email || !email.includes('@')) { showError('Please enter a valid email address.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    errorEl.style.display = 'none';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/beta_signups`, {
+        method: 'POST',
+        headers: {
+          'apikey': window.TWIRLPOWER_ANON_KEY,
+          'Authorization': `Bearer ${window.TWIRLPOWER_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify({
+          name: last ? `${name} ${last}` : name,
+          email: email.toLowerCase(),
+          role: role || null,
+          org: org || null,
+          wants_beta: wantsBeta,
+          source: 'marketing_site',
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        // Check for duplicate email
+        if (err.includes('duplicate') || res.status === 409) {
+          showSuccess(); // Already signed up — treat as success
+          return;
+        }
+        throw new Error(`Server error: ${res.status}`);
+      }
+
+      showSuccess();
+    } catch (err) {
+      console.error('Beta signup error:', err);
+      showError('Something went wrong. Please try again or email us at support@twirlpower.com.');
+      btn.disabled = false;
+      btn.textContent = 'Notify Me When It\'s Ready →';
+    }
+  }
+
+  function showSuccess() {
+    document.getElementById('form-wrap').style.display = 'none';
+    document.getElementById('success-state').style.display = 'block';
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('form-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-btn').textContent = 'Notify Me When It\'s Ready →';
+  }
+
+  // Allow Enter key to submit
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSubmit();
+  });
+</script>
+
+</body>
+</html>

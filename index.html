@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TwirlPower — Track Every Step Up</title>
+  <meta name="description" content="TwirlPower tracks classification levels, competition results, and advancement progress for competitive baton twirlers across USTA, NBTA, TU, and DMA. Free during beta." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:title" content="TwirlPower — Track Every Step Up" />
+  <meta property="og:description" content="The app for competitive baton twirling families, coaches, and competition directors." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://twirlpower.com" />
+  <link rel="canonical" href="https://twirlpower.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & TOKENS ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #0d9488;
+      --teal-dark:   #0f766e;
+      --teal-light:  #ccfbf1;
+      --teal-glow:   rgba(13,148,136,.18);
+      --pink:        #e11d6a;
+      --pink-light:  #fce7f3;
+      --navy:        #0f172a;
+      --navy2:       #1e293b;
+      --slate:       #475569;
+      --muted:       #94a3b8;
+      --border:      #e2e8f0;
+      --bg:          #f8fafc;
+      --card:        #ffffff;
+      --radius:      14px;
+      --radius-sm:   9px;
+      --shadow:      0 1px 3px rgba(0,0,0,.07), 0 6px 20px rgba(0,0,0,.06);
+      --shadow-lg:   0 12px 40px rgba(0,0,0,.13);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--navy);
+      background: var(--card);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'DM Serif Display', serif;
+      line-height: 1.12;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── ANIMATIONS ──────────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes float {
+      0%   { transform: translateY(0px) rotate(-35deg); }
+      50%  { transform: translateY(-12px) rotate(-20deg); }
+      100% { transform: translateY(0px) rotate(-35deg); }
+    }
+    @keyframes batonSpin {
+      0%   { transform: translateY(0px) rotate(0deg); }
+      50%  { transform: translateY(-12px) rotate(180deg); }
+      100% { transform: translateY(0px) rotate(360deg); }
+    }
+    @keyframes spinSlow {
+      to { transform: rotate(360deg); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── BUTTONS ─────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 13px 26px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: all .18s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(13,148,136,.35);
+    }
+    .btn-primary:hover {
+      background: var(--teal-dark);
+      box-shadow: 0 6px 20px rgba(13,148,136,.45);
+      transform: translateY(-1px);
+      color: #fff;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,.3);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,.7);
+      background: rgba(255,255,255,.07);
+      color: #fff;
+    }
+    .btn-dark {
+      background: var(--navy);
+      color: #fff;
+    }
+    .btn-dark:hover {
+      background: var(--navy2);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .btn-lg {
+      font-size: 17px;
+      padding: 16px 36px;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(15,23,42,.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      height: 62px;
+      gap: 32px;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: #fff;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--pink); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 7px;
+      transition: color .15s, background .15s;
+    }
+    .nav-link:hover { color: #fff; background: rgba(255,255,255,.07); }
+    .nav-cta {
+      margin-left: auto;
+      background: var(--teal);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background .15s, transform .15s;
+      flex-shrink: 0;
+    }
+    .nav-cta:hover { background: var(--teal-dark); transform: translateY(-1px); color: #fff; }
+    .nav-mobile-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      margin-left: auto;
+      padding: 4px;
+    }
+    .nav-mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--navy2);
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 12px 0;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 12px 24px;
+      transition: color .15s;
+    }
+    .nav-mobile-menu a:hover { color: #fff; }
+
+    /* ── HERO ────────────────────────────────────────────────────────────── */
+    .hero {
+      background: var(--navy);
+      padding: 100px 0 80px;
+      position: relative;
+      overflow: hidden;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 75% -5%, rgba(13,148,136,.38) 0%, transparent 55%),
+        radial-gradient(ellipse at 5% 95%, rgba(225,29,106,.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 110%, rgba(13,148,136,.12) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13,148,136,.15);
+      color: #5eead4;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 99px;
+      border: 1px solid rgba(13,148,136,.25);
+      margin-bottom: 24px;
+      animation: fadeIn .6s ease both;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #5eead4;
+      animation: spinSlow 2s linear infinite;
+    }
+    .hero-title {
+      font-size: clamp(38px, 5.5vw, 62px);
+      color: #fff;
+      margin-bottom: 22px;
+      line-height: 1.06;
+      animation: fadeUp .7s ease .1s both;
+    }
+    .hero-title .accent { color: var(--teal); }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 500px;
+      animation: fadeUp .7s ease .2s both;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      animation: fadeUp .7s ease .3s both;
+    }
+    .hero-trust {
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: fadeUp .7s ease .4s both;
+    }
+    .hero-trust::before {
+      content: '✓';
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    /* Baton graphic */
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: fadeIn .9s ease .3s both;
+    }
+    .baton-wrap {
+      position: relative;
+      width: 320px;
+      height: 320px;
+    }
+    .baton-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(13,148,136,.2);
+      animation: spinSlow 20s linear infinite;
+    }
+    .baton-ring-2 {
+      inset: 20px;
+      border: 1px solid rgba(225,29,106,.15);
+      animation: spinSlow 14s linear infinite reverse;
+    }
+    .baton-inner {
+      position: absolute;
+      inset: 40px;
+      top: 20px;
+      bottom: 80px;
+      background: rgba(13,148,136,.06);
+      border-radius: 50%;
+      border: 1px solid rgba(13,148,136,.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+    }
+    .baton-svg {
+      width: 160px;
+      height: 160px;
+      animation: batonSpin 8s linear infinite;
+    }
+
+    /* App preview card */
+    .app-preview {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .preview-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .preview-row:last-child { border-bottom: none; }
+    .preview-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .preview-label {
+      font-size: 13px;
+      color: var(--muted);
+      flex: 1;
+    }
+    .preview-val {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .preview-bar-wrap {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .preview-bar {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--teal);
+    }
+
+    /* ── STATS BAR ───────────────────────────────────────────────────────── */
+    .stats-bar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 8px rgba(0,0,0,.05);
+    }
+    .stats-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 0;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 56px;
+    }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 40px;
+      color: var(--teal);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-top: 5px;
+    }
+    .stat-div {
+      width: 1px;
+      height: 44px;
+      background: var(--border);
+    }
+
+    /* ── SECTION DEFAULTS ────────────────────────────────────────────────── */
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+    .section-bg { background: var(--bg); }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px;
+      color: var(--slate);
+      line-height: 1.65;
+      max-width: 560px;
+    }
+    .section-header { margin-bottom: 56px; }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-sub { margin: 0 auto; }
+
+    /* ── PROBLEM SECTION ─────────────────────────────────────────────────── */
+    .problem-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .problem-text .section-sub { max-width: 100%; }
+    .problem-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .problem-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--slate);
+      line-height: 1.55;
+    }
+    .problem-x {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fee2e2;
+      color: #ef4444;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .solution-card {
+      background: var(--navy);
+      border-radius: 20px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .solution-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(13,148,136,.3) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .solution-card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .solution-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+    .solution-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .solution-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(13,148,136,.2);
+      color: #5eead4;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── AUDIENCE CARDS ──────────────────────────────────────────────────── */
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .audience-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: box-shadow .2s, transform .2s, border-color .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .audience-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .audience-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: var(--teal);
+    }
+    .audience-card:hover::before { opacity: 1; }
+    .audience-icon {
+      font-size: 36px;
+      line-height: 1;
+    }
+    .audience-card h3 {
+      font-size: 22px;
+      color: var(--navy);
+    }
+    .audience-card p {
+      font-size: 15px;
+      color: var(--slate);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .audience-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--teal);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap .15s;
+    }
+    .audience-card:hover .audience-link { gap: 8px; }
+
+    /* ── FEATURES ────────────────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      background: var(--teal-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .feature-card h3 {
+      font-size: 19px;
+      color: var(--navy);
+    }
+    .feature-card p {
+      font-size: 14px;
+      color: var(--slate);
+      line-height: 1.65;
+    }
+
+    /* ── COMPETITIONS SECTION ────────────────────────────────────────────── */
+    .competitions-section {
+      background: var(--bg);
+      padding: 96px 0;
+    }
+
+    /* ── ORG STRIP ───────────────────────────────────────────────────────── */
+    .org-strip {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 0;
+    }
+    .org-strip-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .org-badges {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .org-badge-item {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      padding: 8px 22px;
+      border-radius: 99px;
+      letter-spacing: .06em;
+    }
+
+    /* ── DIRECTOR CTA ────────────────────────────────────────────────────── */
+    .director-cta {
+      background: var(--bg);
+      padding: 96px 0;
+    }
+    .director-cta-inner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    .director-cta-inner h2 { font-size: 28px; color: var(--navy); margin-bottom: 10px; }
+    .director-cta-inner p { font-size: 15px; color: var(--slate); line-height: 1.6; max-width: 520px; }
+
+    /* ── FINAL CTA ───────────────────────────────────────────────────────── */
+    .final-cta {
+      background: var(--navy);
+      padding: 100px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 60% 0%, rgba(13,148,136,.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 10% 100%, rgba(225,29,106,.18) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      font-size: clamp(30px, 5vw, 50px);
+      color: #fff;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .final-cta p {
+      font-size: 17px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+      position: relative;
+    }
+    .final-cta-actions { position: relative; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .final-trust {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+      position: relative;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────────── */
+    .footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 56px 0 32px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .footer-brand-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .footer-brand-logo span { color: var(--pink); }
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .footer-col-head {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      transition: color .15s;
+    }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .problem-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .audience-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .director-cta-inner { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-mobile-btn { display: flex; }
+      .stat-item { padding: 0 28px; }
+    }
+
+    @media (max-width: 560px) {
+      .hero { padding: 72px 0 60px; min-height: auto; }
+      .section { padding: 64px 0; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .stat-item { padding: 16px 20px; width: 50%; }
+      .stat-div { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+      <div class="nav-links">
+        <a href="/for-families" class="nav-link">For Families</a>
+        <a href="/for-coaches" class="nav-link">For Coaches</a>
+        <a href="/for-directors" class="nav-link">For Directors</a>
+        <a href="#competitions" class="nav-link">Competitions</a>
+        <a href="https://directory.twirlpower.com" class="nav-link">Directory</a>
+        <a href="/news" class="nav-link">News</a>
+      </div>
+      <a href="/beta" class="nav-cta">Join Beta →</a>
+      <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <a href="/for-families">For Families</a>
+    <a href="/for-coaches">For Coaches</a>
+    <a href="/for-directors">For Directors</a>
+    <a href="#competitions">Competitions</a>
+    <a href="https://directory.twirlpower.com">Directory</a>
+    <a href="/news">News</a>
+    <a href="/beta" style="color:var(--teal);font-weight:700;">Join Beta →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">Open Beta — Free to Use</div>
+        <h1 class="hero-title">
+          Every routine,<br>
+          every score,<br>
+          every <span class="accent">step up.</span>
+        </h1>
+        <p class="hero-sub">
+          TwirlPower tracks classification levels, competition results, and advancement progress for competitive baton twirlers — across USTA, NBTA, TU, and DMA.
+        </p>
+        <div class="hero-actions">
+          <a href="/beta" class="btn btn-primary btn-lg" target="_blank">
+            Start Tracking Free →
+          </a>
+          <a href="#features" class="btn btn-ghost btn-lg">See how it works</a>
+        </div>
+        <div class="hero-trust">Free during beta &nbsp;·&nbsp; Works on iOS, Android &amp; desktop &nbsp;·&nbsp; No credit card needed</div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="baton-wrap">
+          <div class="baton-ring"></div>
+          <div class="baton-ring baton-ring-2"></div>
+          <div class="baton-inner">
+            <!-- Baton SVG -->
+            <svg class="baton-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Tip 1 outline -->
+              <polygon points="27.733,65.290 17.415,66.925 25.695,77.522 29.777,67.907" fill="#0f172a"/>
+              <!-- Tip 1 pink -->
+              <polygon points="27.135,66.214 18.455,67.286 25.596,76.426 28.736,68.263" fill="#e11d6a"/>
+              <!-- Tip 2 outline -->
+              <polygon points="70.223,32.093 74.305,22.478 82.585,33.075 72.267,34.710" fill="#0f172a"/>
+              <!-- Tip 2 pink -->
+              <polygon points="71.264,31.737 74.404,23.574 81.545,32.714 72.865,33.786" fill="#e11d6a"/>
+              <!-- White rod on top -->
+              <polygon points="27.074,66.135 28.798,68.342 72.926,33.865 71.202,31.658" fill="#ffffff" opacity=".95"/>
+            </svg>
+              </g>
+            </svg>
+          </div>
+          <!-- App preview overlay -->
+          <div style="position:absolute;bottom:-100px;right:-60px;z-index:2;">
+            <div class="app-preview">
+              <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;">Classification Progress</div>
+              <div class="preview-row">
+                <div class="preview-dot" style="background:#0d9488"></div>
+                <span class="preview-label">Freestyle — USTA</span>
+                <div class="preview-bar-wrap"><div class="preview-bar" style="width:60%"></div></div>
+                <span class="preview-val" style="background:#f0fdf4;color:#15803d">Beg.</span>
+              </div>
+              <div class="preview-row">
+                <div class="preview-dot" style="background:#7c3aed"></div>
+                <span class="preview-label">Strut — TU</span>
+                <div class="preview-bar-wrap"><div class="preview-bar" style="width:30%;background:#7c3aed"></div></div>
+                <span class="preview-val" style="background:#ede9fe;color:#6d28d9">Nov.</span>
+              </div>
+              <div class="preview-row">
+                <div class="preview-dot" style="background:#0f172a"></div>
+                <span class="preview-label">2-Baton — NBTA</span>
+                <div class="preview-bar-wrap"><div class="preview-bar" style="width:85%;background:#0f172a"></div></div>
+                <span class="preview-val" style="background:#f1f5f9;color:#334155">Int.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS BAR ──────────────────────────────────────────────────────────── -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-inner" id="stats-wrap">
+      <div class="stat-item">
+        <span class="stat-num" id="stat-families">—</span>
+        <span class="stat-label">Families</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat-item">
+        <span class="stat-num" id="stat-twirlers">—</span>
+        <span class="stat-label">Twirlers</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat-item">
+        <span class="stat-num" id="stat-competitions">—</span>
+        <span class="stat-label">Competitions Listed</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROBLEM / SOLUTION ─────────────────────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <div class="problem-wrap">
+      <div class="problem-text reveal">
+        <div class="section-eyebrow">Why TwirlPower</div>
+        <h2 class="section-title">Baton twirling is complex.<br>Tracking it shouldn't be.</h2>
+        <p class="section-sub">Classification rules vary by organization, win counts reset each season, and advancement requirements differ for every org, event, and level.</p>
+        <div class="problem-list">
+          <div class="problem-item">
+            <div class="problem-x">✕</div>
+            <span>Scorecards get lost after every competition</span>
+          </div>
+          <div class="problem-item">
+            <div class="problem-x">✕</div>
+            <span>USTA, NBTA, TU, and DMA all have different rules — hard to track manually</span>
+          </div>
+          <div class="problem-item">
+            <div class="problem-x">✕</div>
+            <span>No way to see the full picture of where your twirler stands</span>
+          </div>
+          <div class="problem-item">
+            <div class="problem-x">✕</div>
+            <span>Coaches can't easily monitor every twirler's advancement status</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <div class="solution-card">
+          <div class="solution-card-title">TwirlPower solves all of it</div>
+          <div class="solution-list">
+            <div class="solution-item">
+              <div class="solution-check">✓</div>
+              <span>Classification and win counts tracked automatically per org and event</span>
+            </div>
+            <div class="solution-item">
+              <div class="solution-check">✓</div>
+              <span>Competition history with placements, scores, and scorecard uploads</span>
+            </div>
+            <div class="solution-item">
+              <div class="solution-check">✓</div>
+              <span>Progress bars showing exactly how close to the next level</span>
+            </div>
+            <div class="solution-item">
+              <div class="solution-check">✓</div>
+              <span>Coach dashboards with advancement alerts for every twirler</span>
+            </div>
+            <div class="solution-item">
+              <div class="solution-check">✓</div>
+              <span>Competition day dashboard — Twirl Tracker — activates automatically</span>
+            </div>
+            <div class="solution-item">
+              <div class="solution-check">✓</div>
+              <span>Installable PWA — works on iOS, Android, and desktop</span>
+            </div>
+          </div>
+          <a href="/beta"
+            style="display:inline-block;margin-top:24px;background:var(--teal);color:#fff;font-size:14px;font-weight:700;padding:11px 20px;border-radius:8px;transition:background .15s;"
+            onmouseover="this.style.background='#0f766e'" onmouseout="this.style.background='#0d9488'">
+            Start free →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AUDIENCES ──────────────────────────────────────────────────────────── -->
+<section class="section section-bg">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-eyebrow">Who It's For</div>
+      <h2 class="section-title">Built for everyone in the gym</h2>
+      <p class="section-sub">TwirlPower serves families, coaches, and competition directors — each with tools built specifically for their role.</p>
+    </div>
+    <div class="audience-grid">
+      <a href="/for-families" class="audience-card reveal" style="text-decoration:none;color:inherit;">
+        <div class="audience-icon">🏆</div>
+        <h3>For Families</h3>
+        <p>Track your twirler's classification level, log competition results with scores and scorecards, and see exactly what it takes to advance — for every org and every event.</p>
+        <span class="audience-link">Learn more →</span>
+      </a>
+      <a href="/for-coaches" class="audience-card reveal" style="transition-delay:.1s;text-decoration:none;color:inherit;">
+        <div class="audience-icon">🎯</div>
+        <h3>For Coaches & Studios</h3>
+        <p>Manage your full studio roster, monitor every twirler's classification at a glance, send competition invites, and get alerted when a twirler is ready to advance.</p>
+        <span class="audience-link">Learn more →</span>
+      </a>
+      <a href="/for-directors" class="audience-card reveal" style="transition-delay:.2s;text-decoration:none;color:inherit;">
+        <div class="audience-icon">📋</div>
+        <h3>For Competition Directors</h3>
+        <p>Create verified competition listings that appear in the TwirlPower directory and reach families and coaches who are actively tracking results.</p>
+        <span class="audience-link">Learn more →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ───────────────────────────────────────────────────────────── -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Features</div>
+      <h2 class="section-title">Everything you need,<br>nothing you don't.</h2>
+      <p class="section-sub">TwirlPower is focused, fast, and built around how competitive twirling actually works.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">📊</div>
+        <h3>Classification Tracking</h3>
+        <p>Win counts, progress bars, and advancement thresholds — tracked per org, per event. USTA, NBTA, TU, and DMA all handled with their own rules.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.08s">
+        <div class="feature-icon">🏅</div>
+        <h3>Competition History</h3>
+        <p>Log placements, scores, all-catch results, and scorecard uploads. Build a complete competition record your twirler can look back on for years.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.16s">
+        <div class="feature-icon">⚡</div>
+        <h3>Twirl Tracker</h3>
+        <p>A competition-day dashboard that auto-activates when a competition is scheduled. See your twirler's events, set numbers, and classification status — updated in real time.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.24s">
+        <div class="feature-icon">👥</div>
+        <h3>Coach Roster & Alerts</h3>
+        <p>Coaches get a full studio roster with classification chips, advancement alerts, and the ability to invite twirlers to competitions directly in the app.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.32s">
+        <div class="feature-icon">🏛️</div>
+        <h3>Club & Studio Management</h3>
+        <p>Claim your club on TwirlPower, manage members, add coaches, and appear in the public directory at directory.twirlpower.com.</p>
+      </div>
+      <div class="feature-card reveal" style="transition-delay:.4s">
+        <div class="feature-icon">📱</div>
+        <h3>Installable PWA</h3>
+        <p>TwirlPower installs on iOS and Android like a native app — with offline read-only access so you're never locked out on competition day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ORG STRIP ──────────────────────────────────────────────────────────── -->
+<div class="org-strip">
+  <div class="container">
+    <p class="org-strip-label">Tracking competitions across all major organizations</p>
+    <div class="org-badges">
+      <span class="org-badge-item" style="background:#0d9488">USTA</span>
+      <span class="org-badge-item" style="background:#0f172a">NBTA</span>
+      <span class="org-badge-item" style="background:#7c3aed">TU</span>
+      <span class="org-badge-item" style="background:#b45309">DMA</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── COMPETITIONS ───────────────────────────────────────────────────────── -->
+<section class="competitions-section" id="competitions">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-eyebrow">Competition Calendar</div>
+      <h2 class="section-title">Upcoming Competitions</h2>
+      <p class="section-sub">Posted by verified directors. Add any competition to TwirlPower to track your results.</p>
+    </div>
+    <div id="tp-competitions"
+         data-limit="6"
+         data-directory="https://directory.twirlpower.com"
+         data-app="https://app.twirlpower.com">
+    </div>
+    <div style="text-align:center;margin-top:28px;">
+      <a href="https://directory.twirlpower.com/competitions" class="btn btn-dark">
+        View All Competitions →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIRECTOR CTA ───────────────────────────────────────────────────────── -->
+<div class="director-cta">
+  <div class="container">
+    <div class="director-cta-inner reveal">
+      <div>
+        <div class="section-eyebrow">Competition Directors</div>
+        <h2>Get your competition in front of every TwirlPower family</h2>
+        <p style="margin-top:10px;">Create a verified director account and post your competition listings. They'll appear in the TwirlPower directory and on this site — reaching families actively tracking results.</p>
+      </div>
+      <a href="https://manage.twirlpower.com" target="_blank" class="btn btn-primary" style="white-space:nowrap;">
+        Open Director Platform →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── FINAL CTA ──────────────────────────────────────────────────────────── -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Be the first to know.</h2>
+    <p>TwirlPower is finishing up development and opening for beta testing soon. Sign up to get early access and help shape the platform.</p>
+    <div class="final-cta-actions">
+      <a href="/beta" class="btn btn-primary btn-lg">
+        Join the Beta →
+      </a>
+      <a href="https://directory.twirlpower.com" class="btn btn-ghost btn-lg">
+        Browse the Directory
+      </a>
+    </div>
+    <p class="final-trust">Works on iOS · Android · Desktop &nbsp;·&nbsp; Installable PWA &nbsp;·&nbsp; Free during open beta</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">Twirl<span>Power</span></div>
+        <p>The home base for competitive baton twirling families, coaches, and competition directors.</p>
+        <a href="/beta" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">
+          Join Beta →
+        </a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Product</div>
+        <a href="/for-families">For Families</a>
+        <a href="/for-coaches">For Coaches</a>
+        <a href="/for-directors">For Directors</a>
+        <a href="/news">News & Updates</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Directory</div>
+        <a href="https://directory.twirlpower.com/coaches">Find a Coach</a>
+        <a href="https://directory.twirlpower.com/clubs">Clubs</a>
+        <a href="https://directory.twirlpower.com/competitions">Competitions</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Organizations</div>
+        <a href="https://ustwirling.com" target="_blank">USTA</a>
+        <a href="https://www.nbtainternational.com" target="_blank">NBTA</a>
+        <a href="https://www.twirlingunlimited.com" target="_blank">TU</a>
+        <a href="https://www.dmatwirl.org" target="_blank">DMA</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TwirlPower, a dba of OAKRAA, LLC (Colorado)</span>
+      <span>
+        <a href="/privacy" style="color:var(--muted);margin-right:16px;transition:color .15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
+        <a href="/terms" style="color:var(--muted);transition:color .15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Terms</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── SCRIPTS ────────────────────────────────────────────────────────────── -->
+<script>
+  // Set anon key — replace with your actual key
+  window.TWIRLPOWER_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZhc2N4bnJybnNrbmpub2pmeHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNjI3MjAsImV4cCI6MjA5MTkzODcyMH0.PeBZxHI8FwISfS0tMwXTcpHBnUFyoLCdtQNm59HrmQU';
+</script>
+<script src="https://app.twirlpower.com/widgets/tp-competitions.js"></script>
+
+<script>
+  // ── Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // ── Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── Live stats from Supabase
+  const SUPABASE_URL = 'https://fascxnrrnsknjnojfxvv.supabase.co';
+
+  async function fetchCount(table, params = {}) {
+    const q = new URLSearchParams(params).toString();
+    const url = `${SUPABASE_URL}/rest/v1/${table}?${q}`;
+    const res = await fetch(url, {
+      headers: {
+        apikey: window.TWIRLPOWER_ANON_KEY,
+        Authorization: `Bearer ${window.TWIRLPOWER_ANON_KEY}`,
+        Prefer: 'count=exact',
+        Range: '0-0',
+      }
+    });
+    const range = res.headers.get('content-range') ?? '';
+    const total = range.split('/')[1];
+    return total === '*' ? 0 : parseInt(total, 10) || 0;
+  }
+
+  function animateCount(el, target, duration = 1200) {
+    const start = performance.now();
+    function update(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  async function loadStats() {
+    try {
+      const [families, twirlers, competitions] = await Promise.all([
+        fetchCount('family_accounts'),
+        fetchCount('twirlers'),
+        fetchCount('public_competitions', { show_on_marketing_site: 'eq.true' }),
+      ]);
+      animateCount(document.getElementById('stat-families'),     families,     1000);
+      animateCount(document.getElementById('stat-twirlers'),     twirlers,     1200);
+      animateCount(document.getElementById('stat-competitions'), competitions, 800);
+    } catch (e) {
+      console.warn('TwirlPower stats error:', e);
+    }
+  }
+
+  loadStats();
+</script>
+
+</body>
+</html>

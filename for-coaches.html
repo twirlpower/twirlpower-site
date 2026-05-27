@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TwirlPower for Coaches & Studios — Manage Your Roster & Studio</title>
+  <meta name="description" content="TwirlPower gives coaches and studio owners a full roster view, classification tracking, advancement alerts, competition management, and club tools. Free during beta." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="canonical" href="https://twirlpower.com/for-coaches" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal:#0d9488; --teal-dark:#0f766e; --teal-light:#ccfbf1; --teal-glow:rgba(13,148,136,.15);
+      --pink:#e11d6a; --navy:#0f172a; --navy2:#1e293b; --slate:#475569; --muted:#94a3b8;
+      --border:#e2e8f0; --bg:#f8fafc; --card:#ffffff; --radius:14px; --radius-sm:9px;
+      --shadow:0 1px 3px rgba(0,0,0,.07),0 6px 20px rgba(0,0,0,.06);
+      --shadow-lg:0 12px 40px rgba(0,0,0,.13);
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'DM Sans',sans-serif; color:var(--navy); background:#fff; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+    h1,h2,h3,h4 { font-family:'DM Serif Display',serif; line-height:1.12; }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:1120px; margin:0 auto; padding:0 24px; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    .nav { position:sticky; top:0; z-index:200; background:rgba(15,23,42,.96); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,.07); }
+    .nav-inner { display:flex; align-items:center; height:62px; gap:32px; }
+    .nav-logo { font-family:'DM Serif Display',serif; font-size:22px; color:#fff; flex-shrink:0; }
+    .nav-logo span { color:var(--pink); }
+    .nav-links { display:flex; align-items:center; gap:4px; flex:1; }
+    .nav-link { font-size:14px; font-weight:500; color:var(--muted); padding:6px 12px; border-radius:7px; transition:color .15s,background .15s; }
+    .nav-link:hover { color:#fff; background:rgba(255,255,255,.07); }
+    .nav-link.active { color:var(--teal); }
+    .nav-cta { margin-left:auto; background:var(--teal); color:#fff; font-size:13px; font-weight:700; padding:8px 18px; border-radius:8px; transition:background .15s; flex-shrink:0; }
+    .nav-cta:hover { background:var(--teal-dark); color:#fff; }
+    .nav-mobile-btn { display:none; background:none; border:none; cursor:pointer; color:#fff; margin-left:auto; padding:4px; }
+    .nav-mobile-menu { display:none; flex-direction:column; background:var(--navy2); border-top:1px solid rgba(255,255,255,.08); padding:12px 0; }
+    .nav-mobile-menu.open { display:flex; }
+    .nav-mobile-menu a { font-size:15px; font-weight:500; color:var(--muted); padding:12px 24px; }
+
+    .hero { background:var(--navy); padding:96px 0 80px; position:relative; overflow:hidden; }
+    .hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse at 70% 0%,rgba(13,148,136,.35) 0%,transparent 55%),radial-gradient(ellipse at 5% 90%,rgba(225,29,106,.18) 0%,transparent 50%); pointer-events:none; }
+    .hero-eyebrow { display:inline-flex; align-items:center; gap:6px; background:rgba(13,148,136,.15); color:#5eead4; font-size:12px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; padding:5px 14px; border-radius:99px; border:1px solid rgba(13,148,136,.25); margin-bottom:24px; animation:fadeIn .6s ease both; }
+    .hero-title { font-size:clamp(34px,5vw,56px); color:#fff; margin-bottom:20px; animation:fadeUp .7s ease .1s both; }
+    .hero-title span { color:var(--teal); }
+    .hero-sub { font-size:18px; color:var(--muted); line-height:1.7; margin-bottom:32px; max-width:560px; animation:fadeUp .7s ease .2s both; }
+    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; animation:fadeUp .7s ease .3s both; }
+    .hero-trust { margin-top:24px; font-size:12px; color:var(--muted); animation:fadeUp .7s ease .4s both; }
+    .btn { display:inline-flex; align-items:center; gap:7px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px; padding:13px 26px; border-radius:var(--radius-sm); border:none; cursor:pointer; transition:all .18s; white-space:nowrap; }
+    .btn-primary { background:var(--teal); color:#fff; box-shadow:0 4px 14px rgba(13,148,136,.35); }
+    .btn-primary:hover { background:var(--teal-dark); color:#fff; transform:translateY(-1px); }
+    .btn-ghost { background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost:hover { border-color:rgba(255,255,255,.7); color:#fff; }
+    .btn-lg { font-size:17px; padding:16px 36px; }
+
+    .section { padding:88px 0; }
+    .section-bg { background:var(--bg); }
+    .section-eyebrow { font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--teal); margin-bottom:10px; }
+    .section-title { font-size:clamp(26px,4vw,40px); color:var(--navy); margin-bottom:14px; }
+    .section-sub { font-size:17px; color:var(--slate); line-height:1.65; max-width:560px; }
+    .section-header { margin-bottom:52px; }
+    .section-header.center { text-align:center; }
+    .section-header.center .section-sub { margin:0 auto; }
+
+    .feature-row { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; margin-bottom:80px; }
+    .feature-row:last-child { margin-bottom:0; }
+    .feature-row.reverse .feature-visual { order:-1; }
+    .feature-list { margin-top:20px; display:flex; flex-direction:column; gap:12px; }
+    .feature-list-item { display:flex; align-items:flex-start; gap:10px; font-size:15px; color:var(--slate); line-height:1.55; }
+    .check { width:20px; height:20px; border-radius:50%; background:var(--teal-glow); color:var(--teal); font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .feature-visual { background:var(--bg); border:1px solid var(--border); border-radius:20px; padding:32px; min-height:260px; display:flex; flex-direction:column; justify-content:center; gap:12px; position:relative; overflow:hidden; }
+    .feature-visual::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 80% 20%,var(--teal-glow) 0%,transparent 60%); pointer-events:none; }
+    .mock-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+    .mock-label { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .mock-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f1f5f9; }
+    .mock-row:last-child { border-bottom:none; }
+    .mock-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:99px; }
+    .avatar-sm { width:28px; height:28px; border-radius:50%; background:var(--teal); color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+    /* FEATURES GRID */
+    .cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .feat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; display:flex; flex-direction:column; gap:12px; transition:box-shadow .2s,transform .2s; }
+    .feat-card:hover { box-shadow:var(--shadow-lg); transform:translateY(-3px); }
+    .feat-icon { width:42px; height:42px; border-radius:10px; background:var(--teal-glow); display:flex; align-items:center; justify-content:center; font-size:20px; }
+    .feat-card h3 { font-size:17px; color:var(--navy); }
+    .feat-card p { font-size:14px; color:var(--slate); line-height:1.6; }
+
+    /* ROADMAP */
+    .roadmap-section { background:var(--navy); padding:88px 0; }
+    .roadmap-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .roadmap-card { border-radius:var(--radius); padding:28px; border:1px solid rgba(255,255,255,.08); }
+    .roadmap-card.built { background:rgba(13,148,136,.08); border-color:rgba(13,148,136,.2); }
+    .roadmap-card.coming { background:rgba(255,255,255,.03); }
+    .roadmap-label { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+    .roadmap-label.built-label { color:#5eead4; }
+    .roadmap-label.coming-label { color:var(--muted); }
+    .roadmap-list { display:flex; flex-direction:column; gap:9px; }
+    .roadmap-item { display:flex; align-items:flex-start; gap:9px; font-size:14px; line-height:1.5; }
+    .roadmap-item.done { color:#e2e8f0; }
+    .roadmap-item.soon { color:var(--muted); }
+    .ri-dot { width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; flex-shrink:0; margin-top:1px; }
+    .ri-dot.done { background:rgba(13,148,136,.25); color:#5eead4; }
+    .ri-dot.soon { background:rgba(255,255,255,.08); color:var(--muted); }
+
+    /* CTA */
+    .cta-banner { background:var(--navy); border-radius:20px; padding:56px 48px; text-align:center; position:relative; overflow:hidden; }
+    .cta-banner::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 60% 0%,rgba(13,148,136,.35) 0%,transparent 55%),radial-gradient(ellipse at 10% 100%,rgba(225,29,106,.18) 0%,transparent 50%); pointer-events:none; }
+    .cta-banner h2 { font-size:clamp(26px,4vw,42px); color:#fff; margin-bottom:14px; position:relative; }
+    .cta-banner p { font-size:16px; color:var(--muted); margin-bottom:32px; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.65; position:relative; }
+    .cta-banner-actions { position:relative; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    .footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 56px 0 32px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .footer-brand-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .footer-brand-logo span { color: var(--pink); }
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .footer-col-head {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col a {
+      font-size: 14px;
+      color: var(--muted);
+      transition: color .15s;
+    }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @media (max-width:900px) {
+      .feature-row { grid-template-columns:1fr; gap:32px; }
+      .feature-row.reverse .feature-visual { order:0; }
+      .cards-grid { grid-template-columns:1fr; }
+      .roadmap-grid { grid-template-columns:1fr; }
+      .nav-links,.nav-cta { display:none; }
+      .nav-mobile-btn { display:flex; }
+    }
+    @media (max-width:560px) { .section { padding:60px 0; } .cta-banner { padding:36px 24px; } }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/for-families" class="nav-link">For Families</a>
+        <a href="/for-coaches" class="nav-link active">For Coaches</a>
+        <a href="/for-directors" class="nav-link">For Directors</a>
+        <a href="https://directory.twirlpower.com" class="nav-link">Directory</a>
+        <a href="/news" class="nav-link">News</a>
+      </div>
+      <a href="/beta" class="nav-cta">Join Beta →</a>
+      <button class="nav-mobile-btn" onclick="document.getElementById('mob').classList.toggle('open')" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="nav-mobile-menu" id="mob">
+    <a href="/">Home</a><a href="/for-families">For Families</a><a href="/for-coaches">For Coaches</a>
+    <a href="/for-directors">For Directors</a><a href="/news">News</a>
+    <a href="/beta" style="color:var(--teal);font-weight:700;">Join Beta →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-eyebrow">For Coaches & Studios</div>
+    <h1 class="hero-title">Your full roster.<br>Every level. <span>One view.</span></h1>
+    <p class="hero-sub">TwirlPower gives coaches and studio owners a complete picture of every twirler's classification, progress, and competition history — so you can focus on coaching, not spreadsheets.</p>
+    <div class="hero-actions">
+      <a href="/beta" class="btn btn-primary btn-lg" target="_blank">Join the Beta →</a>
+      <a href="#roadmap" class="btn btn-ghost btn-lg">See the roadmap</a>
+    </div>
+    <p class="hero-trust">Free during open beta &nbsp;·&nbsp; No credit card needed &nbsp;·&nbsp; Unlimited twirlers</p>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+
+    <div class="feature-row reveal">
+      <div class="feature-text">
+        <div class="section-eyebrow">Studio Roster</div>
+        <h2 class="section-title">See every twirler's classification at a glance</h2>
+        <p class="section-sub">Your studio roster shows every linked twirler with their current classification level and org — no digging through individual profiles. Spot who's ready to advance instantly.</p>
+        <div class="feature-list">
+          <div class="feature-list-item"><div class="check">✓</div><span>Full roster with classification chips per org</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Advancement alerts — get notified when a twirler hits the threshold</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Invite existing TwirlPower users or new families by email</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Bulk invite — search and invite multiple twirlers at once</span></div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="mock-card">
+          <div class="mock-label">Studio Roster — 6 Twirlers</div>
+          <div class="mock-row">
+            <div class="avatar-sm">EO</div>
+            <span style="flex:1;font-size:13px;font-weight:600;color:var(--navy)">Emma O.</span>
+            <span class="mock-badge" style="background:#f0fdf4;color:#15803d">USTA Beg.</span>
+            <span class="mock-badge" style="background:#ede9fe;color:#6d28d9;margin-left:4px">TU Nov.</span>
+          </div>
+          <div class="mock-row">
+            <div class="avatar-sm" style="background:#7c3aed">SF</div>
+            <span style="flex:1;font-size:13px;font-weight:600;color:var(--navy)">Sophia F.</span>
+            <span class="mock-badge" style="background:#dbeafe;color:#1d4ed8">USTA Int.</span>
+          </div>
+          <div class="mock-row">
+            <div class="avatar-sm" style="background:#e11d6a">ML</div>
+            <span style="flex:1;font-size:13px;font-weight:600;color:var(--navy)">Mia L.</span>
+            <span class="mock-badge" style="background:#fef3c7;color:#b45309">NBTA Nov.</span>
+            <span style="font-size:11px;color:var(--pink);font-weight:600;margin-left:6px">⚡ Ready to advance</span>
+          </div>
+        </div>
+        <div style="background:rgba(225,29,106,.08);border:1px solid rgba(225,29,106,.2);border-radius:10px;padding:12px 14px;">
+          <div style="font-size:12px;color:var(--pink);font-weight:700;margin-bottom:4px;">⚡ Advancement Alert</div>
+          <div style="font-size:13px;color:var(--navy)">Mia L. has hit 5 wins in NBTA Novice — ready to advance to Beginner.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse reveal" style="transition-delay:.1s">
+      <div class="feature-text">
+        <div class="section-eyebrow">Competition Management</div>
+        <h2 class="section-title">Create competitions and invite your twirlers</h2>
+        <p class="section-sub">Create competition events in TwirlPower, invite your twirlers, and track who's attending. Families get notified and can add the competition to their tracker.</p>
+        <div class="feature-list">
+          <div class="feature-list-item"><div class="check">✓</div><span>Create coach-side competitions with date, location, and org</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Invite individual twirlers or your full roster</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Track competition attendance and results</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Competitions appear in each twirler's history automatically</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Favorite competitions to follow for your studio</span></div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="mock-card">
+          <div class="mock-label">Upcoming Competitions</div>
+          <div class="mock-row">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--navy)">State Championships 2026</div>
+              <div style="font-size:11px;color:var(--muted)">Apr 26 · Westminster, CO · USTA</div>
+            </div>
+            <span class="mock-badge" style="background:#f0fdf4;color:#15803d">4 attending</span>
+          </div>
+          <div class="mock-row">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--navy)">Summer Invitational</div>
+              <div style="font-size:11px;color:var(--muted)">Jun 14 · Denver, CO · NBTA</div>
+            </div>
+            <span class="mock-badge" style="background:#fef3c7;color:#b45309">Invites sent</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reveal" style="transition-delay:.2s">
+      <div class="feature-text">
+        <div class="section-eyebrow">Club & Studio Management</div>
+        <h2 class="section-title">Claim your studio and manage your team</h2>
+        <p class="section-sub">Claim your club on TwirlPower to appear in the public directory, manage coaches on your team, and handle member requests — all in one place.</p>
+        <div class="feature-list">
+          <div class="feature-list-item"><div class="check">✓</div><span>Claim your club and appear in the TwirlPower directory</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Add other coaches to your club with role management</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Approve or decline member join requests</span></div>
+          <div class="feature-list-item"><div class="check">✓</div><span>Pending member badge keeps you on top of requests</span></div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="mock-card">
+          <div class="mock-label">My Club — Colorado Twirling Academy</div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f1f5f9">
+            <div class="avatar-sm">TW</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--navy)">Tye W.</div>
+              <div style="font-size:11px;color:var(--muted)">Club Owner</div>
+            </div>
+            <span class="mock-badge" style="background:#f0fdf4;color:#15803d">Owner</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 0">
+            <div class="avatar-sm" style="background:#7c3aed">JM</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--navy)">Jamie M.</div>
+              <div style="font-size:11px;color:var(--muted)">Coach</div>
+            </div>
+            <span class="mock-badge" style="background:#dbeafe;color:#1d4ed8">Coach</span>
+          </div>
+        </div>
+        <div style="background:rgba(225,29,106,.08);border:1px solid rgba(225,29,106,.2);border-radius:10px;padding:12px 14px;">
+          <div style="font-size:12px;color:var(--pink);font-weight:700">🔔 2 pending member requests</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MORE FEATURES -->
+<section class="section section-bg">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-eyebrow">All Coach Tools</div>
+      <h2 class="section-title">Everything coaches need today</h2>
+    </div>
+    <div class="cards-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">📊</div>
+        <h3>Classification Dashboard</h3>
+        <p>See every twirler's level across every org in one view. No more asking families for updates.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.08s">
+        <div class="feat-icon">🔔</div>
+        <h3>Advancement Alerts</h3>
+        <p>Get notified automatically when a twirler on your roster hits an advancement threshold.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.16s">
+        <div class="feat-icon">📧</div>
+        <h3>Bulk Invitations</h3>
+        <p>Search existing TwirlPower users or invite new families by email — one at a time or all at once.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.24s">
+        <div class="feat-icon">🗂️</div>
+        <h3>Competition History</h3>
+        <p>View every competition result for your linked twirlers — placements, scores, and scorecard uploads.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.32s">
+        <div class="feat-icon">🌐</div>
+        <h3>Public Directory Listing</h3>
+        <p>Appear in the TwirlPower coach finder at directory.twirlpower.com — searchable by state and org.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.4s">
+        <div class="feat-icon">📱</div>
+        <h3>Mobile Ready</h3>
+        <p>Access your roster and competition tools from any device — works on iOS, Android, and desktop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap-section" id="roadmap">
+  <div class="container">
+    <div class="section-header center reveal" style="--teal:#5eead4">
+      <div class="section-eyebrow" style="color:var(--teal)">What's Coming</div>
+      <h2 class="section-title" style="color:#fff">The full coaching platform — built piece by piece</h2>
+      <p class="section-sub" style="color:var(--muted);margin:0 auto">We're building TwirlPower into a complete coaching and studio management platform. Here's where we're headed.</p>
+    </div>
+    <div class="roadmap-grid">
+      <div class="roadmap-card built reveal">
+        <div class="roadmap-label built-label">✓ Available Now</div>
+        <div class="roadmap-list">
+          <div class="roadmap-item done"><div class="ri-dot done">✓</div><span>Studio roster with classification chips</span></div>
+          <div class="roadmap-item done"><div class="ri-dot done">✓</div><span>Advancement alerts</span></div>
+          <div class="roadmap-item done"><div class="ri-dot done">✓</div><span>Competition creation and invites</span></div>
+          <div class="roadmap-item done"><div class="ri-dot done">✓</div><span>Bulk invite (existing users + new families)</span></div>
+          <div class="roadmap-item done"><div class="ri-dot done">✓</div><span>Club claim and management</span></div>
+          <div class="roadmap-item done"><div class="ri-dot done">✓</div><span>Public directory listing</span></div>
+          <div class="roadmap-item done"><div class="ri-dot done">✓</div><span>Pending member notifications</span></div>
+        </div>
+      </div>
+      <div class="roadmap-card coming reveal" style="transition-delay:.1s">
+        <div class="roadmap-label coming-label">🔜 Coming Soon</div>
+        <div class="roadmap-list">
+          <div class="roadmap-item soon"><div class="ri-dot soon">→</div><span>Group messaging and studio announcements</span></div>
+          <div class="roadmap-item soon"><div class="ri-dot soon">→</div><span>Class scheduling and recurring classes</span></div>
+          <div class="roadmap-item soon"><div class="ri-dot soon">→</div><span>Private lesson booking</span></div>
+          <div class="roadmap-item soon"><div class="ri-dot soon">→</div><span>Practice reminders and notifications</span></div>
+          <div class="roadmap-item soon"><div class="ri-dot soon">→</div><span>Progress reports to send to families</span></div>
+          <div class="roadmap-item soon"><div class="ri-dot soon">→</div><span>Multi-studio management</span></div>
+          <div class="roadmap-item soon"><div class="ri-dot soon">→</div><span>Coach analytics and growth trends</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;position:relative;">
+      <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">Get in early — free during open beta while we build.</p>
+      <a href="/beta" class="btn btn-primary btn-lg" target="_blank">Join the Beta →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-bg">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <h2>Your studio roster is waiting</h2>
+      <p>Create your coach account, link your twirlers, and get the full picture of your studio's classification status — free during open beta.</p>
+      <div class="cta-banner-actions">
+        <a href="/beta" class="btn btn-primary btn-lg" target="_blank">Join the Beta →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">Twirl<span>Power</span></div>
+        <p>The home base for competitive baton twirling families, coaches, and competition directors.</p>
+        <a href="https://app.twirlpower.com" target="_blank" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">
+          Open App →
+        </a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Product</div>
+        <a href="/for-families">For Families</a>
+        <a href="/for-coaches">For Coaches</a>
+        <a href="/for-directors">For Directors</a>
+        <a href="/news">News &amp; Updates</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Directory</div>
+        <a href="https://directory.twirlpower.com/coaches">Find a Coach</a>
+        <a href="https://directory.twirlpower.com/clubs">Clubs</a>
+        <a href="https://directory.twirlpower.com/competitions">Competitions</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-head">Organizations</div>
+        <a href="https://ustwirling.com" target="_blank">USTA</a>
+        <a href="https://www.nbtainternational.com" target="_blank">NBTA</a>
+        <a href="https://www.twirlingunlimited.com" target="_blank">TU</a>
+        <a href="https://www.dmatwirl.org" target="_blank">DMA</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TwirlPower, a dba of OAKRAA, LLC (Colorado)</span>
+      <span>
+        <a href="/privacy" style="color:var(--muted);margin-right:16px;transition:color .15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
+        <a href="/terms" style="color:var(--muted);transition:color .15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Terms</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
