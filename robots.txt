@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /
 
-# TwirlPower app — not indexable content
+Sitemap: https://twirlpower.com/sitemap.xml
