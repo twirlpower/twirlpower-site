@@ -1,228 +1,46 @@
-<!DOCTYPE html>
 <!--
   ╔══════════════════════════════════════════════════════════════════════════╗
-  ║  TWIRLPOWER ARTICLE TEMPLATE                                                ║
+  ║  TWIRLPOWER ARTICLE PARTIAL TEMPLATE                                        ║
+  ║                                                                            ║
+  ║  Articles are now style-free PARTIALS injected into /article.html.         ║
+  ║  This file is ONLY the article body — the shell (/article.html) provides   ║
+  ║  the <html>, <head>, nav, hero, footer, and ALL css.                       ║
   ║                                                                            ║
   ║  To publish a new article:                                                 ║
-  ║   1. Copy this file to  articles/<your-slug>.html  (slug = lowercase,      ║
-  ║      hyphenated, must match the "slug" in articles/data.json).             ║
-  ║   2. Replace every {{PLACEHOLDER}} below.                                  ║
-  ║   3. Write the article inside the <article class="article-body"> block.    ║
-  ║   4. Add a matching entry to articles/data.json so the card appears on     ║
-  ║      /news. Categories must be one of:                                     ║
+  ║   1. Copy this file to  articles/<your-slug>.html                          ║
+  ║      (slug = lowercase, hyphenated; must match the "slug" in data.json).   ║
+  ║   2. Write the body below using ONLY these existing class names — do NOT   ║
+  ║      add <style>, <nav>, <footer>, or a hero. The shell styles them:       ║
+  ║         <article class="article-body"> … </article>   (prose)              ║
+  ║         <section class="article-cta"><div class="cta-inner"> … </div>      ║
+  ║      Inside .article-body use <p>, <h2>, <ul><li>, <strong>, and links     ║
+  ║      styled inline with style="color:var(--teal);font-weight:600;".        ║
+  ║   3. Add a matching entry to articles/data.json (title, date, category,    ║
+  ║      author, excerpt). Category must be one of:                            ║
   ║         Education · News · Tips & Strategy · TwirlPower Updates             ║
-  ║   5. Commit & push — Vercel auto-deploys. URL = /articles/<your-slug>      ║
-  ║      (cleanUrls is on, so do NOT include .html in links).                  ║
-  ║                                                                            ║
-  ║  Do not edit the nav, footer, or :root brand tokens — they mirror the      ║
-  ║  rest of the site and keep every page consistent.                          ║
+  ║   4. Commit & push — Vercel auto-deploys. The live URL is                  ║
+  ║         /article.html?slug=<your-slug>                                      ║
+  ║      (the News page links here automatically once data.json is updated).   ║
   ╚══════════════════════════════════════════════════════════════════════════╝
 -->
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- {{TITLE}} = full article title · keep " | TwirlPower" suffix -->
-  <title>{{TITLE}} | TwirlPower</title>
-  <!-- {{EXCERPT}} = one-sentence summary (also used as the card excerpt in data.json) -->
-  <meta name="description" content="{{EXCERPT}}" />
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <!-- {{SLUG}} = the file name without .html -->
-  <link rel="canonical" href="https://twirlpower.com/articles/{{SLUG}}" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    /* Brand tokens — shared across the whole site. Teal #0d9488, pink #e11d6a, navy #0f172a. */
-    :root {
-      --teal: #0d9488; --teal-dark: #0f766e; --pink: #e11d6a;
-      --navy: #0f172a; --navy2: #1e293b; --slate: #475569; --muted: #94a3b8;
-      --border: #e2e8f0; --bg: #f8fafc; --card: #ffffff; --radius: 12px;
-    }
-    body { font-family: 'DM Sans', sans-serif; color: var(--navy); background: var(--bg); -webkit-font-smoothing: antialiased; }
-    h1, h2, h3 { font-family: 'DM Serif Display', serif; line-height: 1.2; }
-    a { text-decoration: none; color: inherit; }
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-
-    /* NAV */
-    .nav { position: sticky; top: 0; z-index: 200; background: rgba(15,23,42,.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.07); }
-    .nav-inner { max-width: 1120px; margin: 0 auto; padding: 0 24px; height: 62px; display: flex; align-items: center; gap: 32px; }
-    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: #fff; flex-shrink: 0; }
-    .nav-logo span { color: var(--pink); }
-    .nav-links { display: flex; align-items: center; gap: 4px; flex: 1; }
-    .nav-link { font-size: 14px; font-weight: 500; color: var(--muted); padding: 6px 12px; border-radius: 7px; transition: color .15s, background .15s; }
-    .nav-link:hover { color: #fff; background: rgba(255,255,255,.07); }
-    .nav-link.active { color: var(--teal); }
-    .nav-cta { margin-left: auto; background: var(--teal); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 8px; transition: background .15s; flex-shrink: 0; }
-    .nav-cta:hover { background: var(--teal-dark); color: #fff; }
-    .nav-mobile-btn { display: none; background: none; border: none; cursor: pointer; color: #fff; margin-left: auto; padding: 4px; }
-    .nav-mobile-menu { display: none; flex-direction: column; background: var(--navy2); border-top: 1px solid rgba(255,255,255,.08); padding: 12px 0; }
-    .nav-mobile-menu.open { display: flex; }
-    .nav-mobile-menu a { font-size: 15px; font-weight: 500; color: var(--muted); padding: 12px 24px; }
-
-    /* ARTICLE HERO */
-    .article-hero { background: var(--navy); padding: 56px 0 48px; position: relative; overflow: hidden; }
-    .article-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 0%, rgba(13,148,136,.3) 0%, transparent 55%); pointer-events: none; }
-    .article-hero .container { position: relative; max-width: 760px; }
-    .back-link { display: inline-block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 20px; transition: color .15s; }
-    .back-link:hover { color: #fff; }
-    .badge { display: inline-block; background: rgba(13,148,136,.2); color: #5eead4; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 99px; margin-bottom: 16px; }
-    .article-hero h1 { font-size: clamp(28px, 4.5vw, 42px); color: #fff; margin-bottom: 16px; }
-    .article-meta { font-size: 14px; color: var(--muted); }
-    .article-meta .dot { margin: 0 8px; opacity: .5; }
-
-    /* ARTICLE BODY */
-    .article-body { max-width: 760px; margin: 0 auto; padding: 56px 24px 72px; }
-    .article-body p { font-size: 16px; color: var(--slate); line-height: 1.8; margin-bottom: 20px; }
-    .article-body p:last-child { margin-bottom: 0; }
-    .article-body strong { color: var(--navy); font-weight: 600; }
-    .article-body h2 { font-size: 26px; color: var(--navy); margin: 36px 0 14px; }
-    .article-body ul { padding-left: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 9px; }
-    .article-body li { font-size: 16px; color: var(--slate); line-height: 1.7; }
-
-    /* CTA */
-    .article-cta { max-width: 760px; margin: 0 auto 80px; }
-    .cta-inner { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 44px; text-align: center; }
-    .cta-inner h2 { font-size: 24px; color: var(--navy); margin-bottom: 10px; }
-    .cta-inner p { font-size: 15px; color: var(--slate); line-height: 1.65; max-width: 440px; margin: 0 auto 24px; }
-    .btn { display: inline-flex; align-items: center; gap: 7px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; padding: 12px 24px; border-radius: 9px; border: none; cursor: pointer; transition: all .18s; text-decoration: none; }
-    .btn-primary { background: var(--teal); color: #fff; }
-    .btn-primary:hover { background: var(--teal-dark); color: #fff; transform: translateY(-1px); }
-
-    /* FOOTER */
-    .footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,.07); padding: 56px 0 32px; }
-    .footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.07); }
-    .footer-brand-logo { font-family: 'DM Serif Display', serif; font-size: 24px; color: #fff; margin-bottom: 10px; }
-    .footer-brand-logo span { color: var(--pink); }
-    .footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-    .footer-col-head { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; margin-bottom: 16px; }
-    .footer-col a { display: block; font-size: 14px; color: var(--muted); margin-bottom: 10px; transition: color .15s; }
-    .footer-col a:hover { color: #fff; }
-    .footer-bottom { padding-top: 28px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 12px; }
-
-    @media (max-width: 900px) {
-      .footer-inner { grid-template-columns: 1fr 1fr; }
-      .nav-links, .nav-cta { display: none; }
-      .nav-mobile-btn { display: flex; }
-    }
-    @media (max-width: 560px) {
-      .footer-inner { grid-template-columns: 1fr; }
-      .cta-inner { padding: 32px 20px; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- ── NAV — do not edit (mirrors the rest of the site) ───────────────────── -->
-<nav class="nav">
-  <div class="container">
-    <div class="nav-inner">
-      <a href="/" class="nav-logo">Twirl<span>Power</span></a>
-      <div class="nav-links">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/for-families" class="nav-link">For Families</a>
-        <a href="/for-coaches" class="nav-link">For Coaches</a>
-        <a href="/for-directors" class="nav-link">For Directors</a>
-        <a href="https://directory.twirlpower.com" class="nav-link">Directory</a>
-        <a href="/news" class="nav-link active">News</a>
-      </div>
-      <a href="https://app.twirlpower.com" class="nav-cta" target="_blank">Open App →</a>
-      <button class="nav-mobile-btn" onclick="document.getElementById('mob').classList.toggle('open')" aria-label="Menu">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-    </div>
-  </div>
-  <div class="nav-mobile-menu" id="mob">
-    <a href="/">Home</a>
-    <a href="/for-families">For Families</a>
-    <a href="/for-coaches">For Coaches</a>
-    <a href="/for-directors">For Directors</a>
-    <a href="https://directory.twirlpower.com">Directory</a>
-    <a href="/news">News</a>
-    <a href="https://app.twirlpower.com" style="color:var(--teal);font-weight:700;" target="_blank">Open App →</a>
-  </div>
-</nav>
-
-<!-- ── HERO — set the category badge, title, date, and author ─────────────── -->
-<div class="article-hero">
-  <div class="container">
-    <a href="/news" class="back-link">← Back to News</a>
-    <!-- {{CATEGORY}} = Education | News | Tips & Strategy | TwirlPower Updates -->
-    <span class="badge">{{CATEGORY}}</span>
-    <h1>{{TITLE}}</h1>
-    <div class="article-meta">
-      <!-- {{DATE}} = human-readable, e.g. May 28, 2026 -->
-      <span>{{DATE}}</span>
-      <span class="dot">·</span>
-      <!-- {{AUTHOR}} = e.g. TwirlPower -->
-      <span>By {{AUTHOR}}</span>
-    </div>
-  </div>
-</div>
-
-<!-- ── BODY — write the article here. Use <p>, <h2>, <ul><li>, <strong>. ──── -->
 <article class="article-body">
-  <p>Article content coming soon.</p>
+  <p>Write the opening paragraph here. Use <strong>strong</strong> for emphasis and
+    <a href="https://app.twirlpower.com" style="color:var(--teal);font-weight:600;">inline links</a> in teal.</p>
+
+  <h2>A section heading</h2>
+  <p>Body copy for the section.</p>
+  <ul>
+    <li>List item one</li>
+    <li>List item two</li>
+  </ul>
+
+  <p>Closing paragraph.</p>
 </article>
 
-<!-- ── CTA — keep or customize the closing call to action ─────────────────── -->
 <section class="article-cta">
   <div class="cta-inner">
-    <h2>Ready to get started?</h2>
-    <p>TwirlPower tracks classification, results, and advancement across USTA, NBTA, TU, and DMA — free during open beta.</p>
+    <h2>Closing call to action</h2>
+    <p>One or two sentences pointing readers to the app or another next step.</p>
     <a href="https://app.twirlpower.com" class="btn btn-primary" target="_blank">Open App →</a>
   </div>
 </section>
-
-<!-- ── FOOTER — do not edit (mirrors the rest of the site) ────────────────── -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-brand-logo">Twirl<span>Power</span></div>
-        <p>The home base for competitive baton twirling families, coaches, and competition directors.</p>
-        <a href="https://app.twirlpower.com" target="_blank" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Open App →</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-head">Product</div>
-        <a href="/for-families">For Families</a>
-        <a href="/for-coaches">For Coaches</a>
-        <a href="/for-directors">For Directors</a>
-        <a href="/news">News &amp; Updates</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-head">Directory</div>
-        <a href="https://directory.twirlpower.com/coaches">Find a Coach</a>
-        <a href="https://directory.twirlpower.com/clubs">Clubs</a>
-        <a href="https://directory.twirlpower.com/competitions">Competitions</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-head">Organizations</div>
-        <a href="https://ustwirling.com" target="_blank">USTA</a>
-        <a href="https://www.nbtainternational.com" target="_blank">NBTA</a>
-        <a href="https://www.twirlingunlimited.com" target="_blank">TU</a>
-        <a href="https://www.dmatwirl.org" target="_blank">DMA</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 TwirlPower, a dba of OAKRAA, LLC (Colorado)</span>
-      <span>
-        <a href="/privacy" style="color:var(--muted);margin-right:16px;transition:color .15s;">Privacy Policy</a>
-        <a href="/terms" style="color:var(--muted);transition:color .15s;">Terms</a>
-      </span>
-    </div>
-  </div>
-</footer>
-
-<script>
-  document.querySelectorAll('.nav-mobile-menu a').forEach(a => {
-    a.addEventListener('click', () => document.getElementById('mob').classList.remove('open'));
-  });
-</script>
-
-</body>
-</html>
