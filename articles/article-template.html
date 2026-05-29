@@ -12,7 +12,7 @@
   ║   2. Write the body below using ONLY these existing class names — do NOT   ║
   ║      add <style>, <nav>, <footer>, or a hero. The shell styles them:       ║
   ║         <article class="article-body"> … </article>   (prose)              ║
-  ║         <section class="article-cta"><div class="cta-inner"> … </div>      ║
+  ║         <section class="article-cta"><div class="article-cta-inner"> … </div> ║
   ║      Inside .article-body use <p>, <h2>, <ul><li>, <strong>, and links     ║
   ║      styled inline with style="color:var(--teal);font-weight:600;".        ║
   ║   3. Add a matching entry to articles/data.json (title, date, category,    ║
@@ -38,9 +38,11 @@
 </article>
 
 <section class="article-cta">
-  <div class="cta-inner">
+  <div class="article-cta-inner">
     <h2>Closing call to action</h2>
     <p>One or two sentences pointing readers to the app or another next step.</p>
-    <a href="https://app.twirlpower.com" class="btn btn-primary" target="_blank">Open App →</a>
+    <a href="https://app.twirlpower.com" class="cta-btn" target="_blank">Open App →</a>
+    <!-- Optional small line under the button: -->
+    <span class="cta-sub">Free to start. No credit card required.</span>
   </div>
 </section>
