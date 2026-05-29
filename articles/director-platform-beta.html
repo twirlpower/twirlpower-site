@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>News & Resources | TwirlPower</title>
-  <meta name="description" content="Guides, product updates, and strategy for the competitive baton twirling community." />
+  <title>Director Platform beta opening soon — manage.twirlpower.com | TwirlPower</title>
+  <meta name="description" content="The TwirlPower Director Platform is entering beta — a dedicated app for competition directors to plan, build, and run a baton twirling competition from start to finish." />
   <link rel="icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="canonical" href="https://twirlpower.com/news" />
+  <link rel="canonical" href="https://twirlpower.com/articles/director-platform-beta" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
@@ -41,40 +41,34 @@
     .nav-mobile-menu.open { display: flex; }
     .nav-mobile-menu a { font-size: 15px; font-weight: 500; color: var(--muted); padding: 12px 24px; }
 
-    /* HERO */
-    .hero { background: var(--navy); padding: 72px 0 60px; position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 0%, rgba(13,148,136,.3) 0%, transparent 55%); pointer-events: none; }
-    .hero .container { position: relative; }
-    .hero-eyebrow { display: inline-block; background: rgba(13,148,136,.15); color: #5eead4; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 5px 14px; border-radius: 99px; border: 1px solid rgba(13,148,136,.25); margin-bottom: 20px; }
-    .hero h1 { font-size: clamp(32px, 5vw, 48px); color: #fff; margin-bottom: 14px; }
-    .hero p { font-size: 17px; color: var(--muted); max-width: 520px; line-height: 1.65; }
+    /* ARTICLE HERO */
+    .article-hero { background: var(--navy); padding: 56px 0 48px; position: relative; overflow: hidden; }
+    .article-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 0%, rgba(13,148,136,.3) 0%, transparent 55%); pointer-events: none; }
+    .article-hero .container { position: relative; max-width: 760px; }
+    .back-link { display: inline-block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 20px; transition: color .15s; }
+    .back-link:hover { color: #fff; }
+    .badge { display: inline-block; background: rgba(13,148,136,.2); color: #5eead4; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 99px; margin-bottom: 16px; }
+    .article-hero h1 { font-size: clamp(28px, 4.5vw, 42px); color: #fff; margin-bottom: 16px; }
+    .article-meta { font-size: 14px; color: var(--muted); }
+    .article-meta .dot { margin: 0 8px; opacity: .5; }
 
-    /* CONTENT */
-    .content { max-width: 1000px; margin: 0 auto; padding: 48px 24px 88px; }
+    /* ARTICLE BODY */
+    .article-body { max-width: 760px; margin: 0 auto; padding: 56px 24px 72px; }
+    .article-body p { font-size: 16px; color: var(--slate); line-height: 1.8; margin-bottom: 20px; }
+    .article-body p:last-child { margin-bottom: 0; }
+    .article-body strong { color: var(--navy); font-weight: 600; }
+    .article-body h2 { font-size: 26px; color: var(--navy); margin: 36px 0 14px; }
+    .article-body ul { padding-left: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 9px; }
+    .article-body li { font-size: 16px; color: var(--slate); line-height: 1.7; }
 
-    /* FILTER BAR */
-    .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
-    .filter-btn { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; padding: 8px 18px; border-radius: 99px; border: 1px solid var(--border); background: var(--card); color: var(--slate); cursor: pointer; transition: all .15s; }
-    .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .filter-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
-
-    /* CARD GRID */
-    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .article-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; transition: box-shadow .2s, transform .2s; }
-    .article-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.1); transform: translateY(-2px); }
-    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-    .card-badge { display: inline-block; background: rgba(13,148,136,.1); color: var(--teal); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 11px; border-radius: 99px; }
-    .card-date { font-size: 13px; color: var(--muted); flex-shrink: 0; }
-    .article-card h2 { font-size: 21px; color: var(--navy); line-height: 1.28; margin-bottom: 10px; }
-    .card-excerpt { font-size: 14.5px; color: var(--slate); line-height: 1.65; margin-bottom: 18px; flex: 1; }
-    .card-readmore { align-self: flex-start; font-size: 14px; font-weight: 600; color: var(--teal); transition: color .15s; }
-    .article-card:hover .card-readmore { color: var(--teal-dark); }
-
-    /* STATES */
-    .grid-state { grid-column: 1 / -1; text-align: center; padding: 64px 24px; }
-    .grid-state .icon { font-size: 40px; margin-bottom: 14px; }
-    .grid-state h2 { font-size: 22px; color: var(--navy); margin-bottom: 8px; }
-    .grid-state p { font-size: 15px; color: var(--slate); line-height: 1.6; max-width: 380px; margin: 0 auto; }
+    /* CTA */
+    .article-cta { max-width: 760px; margin: 0 auto 80px; }
+    .cta-inner { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 44px; text-align: center; }
+    .cta-inner h2 { font-size: 24px; color: var(--navy); margin-bottom: 10px; }
+    .cta-inner p { font-size: 15px; color: var(--slate); line-height: 1.65; max-width: 440px; margin: 0 auto 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 7px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; padding: 12px 24px; border-radius: 9px; border: none; cursor: pointer; transition: all .18s; text-decoration: none; }
+    .btn-primary { background: var(--teal); color: #fff; }
+    .btn-primary:hover { background: var(--teal-dark); color: #fff; transform: translateY(-1px); }
 
     /* FOOTER */
     .footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,.07); padding: 56px 0 32px; }
@@ -86,20 +80,15 @@
     .footer-col a { display: block; font-size: 14px; color: var(--muted); margin-bottom: 10px; transition: color .15s; }
     .footer-col a:hover { color: #fff; }
     .footer-bottom { padding-top: 28px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 12px; }
-    .btn { display: inline-flex; align-items: center; gap: 7px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; padding: 12px 24px; border-radius: 9px; border: none; cursor: pointer; transition: all .18s; text-decoration: none; }
-    .btn-primary { background: var(--teal); color: #fff; }
-    .btn-primary:hover { background: var(--teal-dark); color: #fff; transform: translateY(-1px); }
 
     @media (max-width: 900px) {
       .footer-inner { grid-template-columns: 1fr 1fr; }
       .nav-links, .nav-cta { display: none; }
       .nav-mobile-btn { display: flex; }
     }
-    @media (max-width: 680px) {
-      .card-grid { grid-template-columns: 1fr; }
-    }
     @media (max-width: 560px) {
       .footer-inner { grid-template-columns: 1fr; }
+      .cta-inner { padding: 32px 20px; }
     }
   </style>
 </head>
@@ -134,27 +123,48 @@
   </div>
 </nav>
 
-<div class="hero">
+<!-- HERO -->
+<div class="article-hero">
   <div class="container">
-    <div class="hero-eyebrow">Articles · Guides · Updates</div>
-    <h1>TwirlPower News &amp; Resources</h1>
-    <p>Guides, product updates, and strategy for the competitive baton twirling community.</p>
+    <a href="/news" class="back-link">← Back to News</a>
+    <span class="badge">TwirlPower Updates</span>
+    <h1>Director Platform beta opening soon — manage.twirlpower.com</h1>
+    <div class="article-meta">
+      <span>May 2026</span>
+      <span class="dot">·</span>
+      <span>By TwirlPower</span>
+    </div>
   </div>
 </div>
 
-<div class="content">
-  <div class="filter-bar" id="filters">
-    <button class="filter-btn active" data-cat="All">All</button>
-    <button class="filter-btn" data-cat="Education">Education</button>
-    <button class="filter-btn" data-cat="News">News</button>
-    <button class="filter-btn" data-cat="Tips & Strategy">Tips &amp; Strategy</button>
-    <button class="filter-btn" data-cat="TwirlPower Updates">TwirlPower Updates</button>
-  </div>
+<!-- BODY -->
+<article class="article-body">
+  <p>We're excited to announce that the <strong>TwirlPower Director Platform</strong> is entering beta testing at <a href="https://manage.twirlpower.com" style="color:var(--teal);font-weight:600;">manage.twirlpower.com</a>.</p>
+  <p>The Director Platform is a dedicated app built specifically for competition directors — completely separate from the family and coach app. It gives directors everything they need to plan, build, and run a baton twirling competition from start to finish.</p>
+  <p><strong>What's already built in the Director Platform:</strong></p>
+  <ul>
+    <li>Competition setup with full lifecycle management (Draft → Published → Registration → Live → Completed)</li>
+    <li>Public registration form — embeddable on your own website</li>
+    <li>Entries management — manual entry, online form, duet and group support</li>
+    <li>Visual schedule builder — drag events onto a lane board</li>
+    <li>Gyms and lanes management with configurable lane counts</li>
+    <li>Judge roster management</li>
+    <li>PDF and CSV schedule export</li>
+    <li>Public/Private competition visibility toggle</li>
+    <li>Competition listings auto-appear on directory.twirlpower.com and twirlpower.com</li>
+  </ul>
+  <p><strong>What's coming next:</strong> Results and scoring tab, entry fee collection via Stripe, conflict detection, real-time scoreboard, and judge scoring interface.</p>
+  <p>If you're a competition director interested in beta testing, <a href="https://manage.twirlpower.com" style="color:var(--teal);font-weight:600;">visit manage.twirlpower.com</a> to get started.</p>
+</article>
 
-  <div class="card-grid" id="grid">
-    <div class="grid-state"><p>Loading articles…</p></div>
+<!-- CTA -->
+<section class="article-cta">
+  <div class="cta-inner">
+    <h2>Run your next competition on TwirlPower</h2>
+    <p>Plan, build, and manage your competition end to end. The Director Platform is free during beta.</p>
+    <a href="https://manage.twirlpower.com" class="btn btn-primary" target="_blank">Open Director Platform →</a>
   </div>
-</div>
+</section>
 
 <footer class="footer">
   <div class="container">
@@ -196,66 +206,6 @@
 </footer>
 
 <script>
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  let articles = [];
-  let activeCategory = 'All';
-
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-  }
-  // Parse 'YYYY-MM-DD' manually so there's no timezone shift from Date().
-  function fmtDate(iso) {
-    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
-    if (!m) return esc(iso);
-    return MONTHS[parseInt(m[2], 10) - 1] + ' ' + parseInt(m[3], 10) + ', ' + m[1];
-  }
-
-  function render() {
-    const grid = document.getElementById('grid');
-    const list = activeCategory === 'All'
-      ? articles
-      : articles.filter(a => a.category === activeCategory);
-
-    if (!list.length) {
-      grid.innerHTML = '<div class="grid-state"><div class="icon">📭</div><h2>No articles yet</h2>'
-        + '<p>There\'s nothing in this category right now — check back soon.</p></div>';
-      return;
-    }
-
-    grid.innerHTML = list.map(a => `
-      <a class="article-card" href="/articles/${encodeURIComponent(a.slug)}">
-        <div class="card-top">
-          <span class="card-badge">${esc(a.category)}</span>
-          <span class="card-date">${fmtDate(a.date)}</span>
-        </div>
-        <h2>${esc(a.title)}</h2>
-        <p class="card-excerpt">${esc(a.excerpt)}</p>
-        <span class="card-readmore">Read More →</span>
-      </a>`).join('');
-  }
-
-  // Filter buttons are in the HTML so the bar shows even if the fetch fails.
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeCategory = btn.getAttribute('data-cat');
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-      render();
-    });
-  });
-
-  fetch('/articles/data.json')
-    .then(r => { if (!r.ok) throw new Error('load failed'); return r.json(); })
-    .then(data => {
-      articles = (Array.isArray(data) ? data : []).slice()
-        .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
-      render();
-    })
-    .catch(() => {
-      document.getElementById('grid').innerHTML =
-        '<div class="grid-state"><div class="icon">⚠️</div><h2>Couldn\'t load articles</h2>'
-        + '<p>Please refresh the page to try again.</p></div>';
-    });
-
   document.querySelectorAll('.nav-mobile-menu a').forEach(a => {
     a.addEventListener('click', () => document.getElementById('mob').classList.remove('open'));
   });
