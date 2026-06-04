@@ -36,6 +36,9 @@
     .nav-inner { display:flex; align-items:center; height:62px; gap:32px; }
     .nav-logo { font-family:'DM Serif Display',serif; font-size:22px; color:#fff; flex-shrink:0; }
     .nav-logo span { color:var(--pink); }
+    .nav-brand { display:flex; align-items:center; gap:14px; flex-shrink:0; }
+    .nav-tagline { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:400; color:rgba(255,255,255,.6); letter-spacing:.02em; padding-left:14px; border-left:1px solid rgba(255,255,255,.18); }
+    @media (max-width:768px){ .nav-tagline { display:none; } }
     .nav-links { display:flex; align-items:center; gap:4px; flex:1; }
     .nav-link { font-size:14px; font-weight:500; color:var(--muted); padding:6px 12px; border-radius:7px; transition:color .15s,background .15s; }
     .nav-link:hover { color:#fff; background:rgba(255,255,255,.07); }
@@ -137,6 +140,8 @@
       margin-bottom: 10px;
     }
     .footer-brand-logo span { color: var(--pink); }
+    .footer-tagline { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(255,255,255,.72); letter-spacing: .02em; margin-bottom: 14px; }
+    .footer-narrative { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.6; max-width: 480px; margin-bottom: 20px; }
     .footer-brand p {
       font-size: 14px;
       color: var(--muted);
@@ -189,7 +194,10 @@
 <nav class="nav">
   <div class="container">
     <div class="nav-inner">
-      <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+      <div class="nav-brand">
+        <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+        <span class="nav-tagline">Run your competition with confidence.</span>
+      </div>
       <div class="nav-links">
         <a href="/" class="nav-link">Home</a>
         <a href="/for-families" class="nav-link">For Families</a>
@@ -197,6 +205,7 @@
         <a href="/for-directors" class="nav-link active">For Directors</a>
         <a href="https://directory.twirlpower.com" class="nav-link">Directory</a>
         <a href="/news" class="nav-link">News</a>
+        <a href="/about" class="nav-link">About</a>
       </div>
       <a href="https://manage.twirlpower.com" class="nav-cta" target="_blank">Open Director Platform →</a>
       <button class="nav-mobile-btn" onclick="document.getElementById('mob').classList.toggle('open')" aria-label="Menu">
@@ -206,7 +215,7 @@
   </div>
   <div class="nav-mobile-menu" id="mob">
     <a href="/">Home</a><a href="/for-families">For Families</a><a href="/for-coaches">For Coaches</a>
-    <a href="/for-directors">For Directors</a><a href="https://directory.twirlpower.com">Directory</a><a href="/news">News</a>
+    <a href="/for-directors">For Directors</a><a href="https://directory.twirlpower.com">Directory</a><a href="/news">News</a><a href="/about">About</a>
     <a href="https://manage.twirlpower.com" style="color:var(--teal);font-weight:700;" target="_blank">Open Director Platform →</a>
   </div>
 </nav>
@@ -435,7 +444,8 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="footer-brand-logo">Twirl<span>Power</span></div>
-        <p>The home base for competitive baton twirling families, coaches, and competition directors.</p>
+        <div class="footer-tagline">Free for families. Always.</div>
+        <p class="footer-narrative">TwirlPower will always be free for families. Built by a twirling family, for twirling families.</p>
         <a href="https://app.twirlpower.com" target="_blank" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">
           Open App →
         </a>

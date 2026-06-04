@@ -67,6 +67,9 @@
       color: #fff;
     }
     .nav-logo span { color: var(--pink); }
+    .nav-brand { display:flex; align-items:center; gap:14px; }
+    .nav-tagline { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:400; color:rgba(255,255,255,.6); letter-spacing:.02em; padding-left:14px; border-left:1px solid rgba(255,255,255,.18); }
+    @media (max-width:768px){ .nav-tagline { display:none; } }
     .nav-back {
       font-size: 13px;
       color: var(--muted);
@@ -334,7 +337,10 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+    <div class="nav-brand">
+      <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+      <span class="nav-tagline">Free for families. Always.</span>
+    </div>
     <a href="/" class="nav-back">← Back to site</a>
   </nav>
 

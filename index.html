@@ -172,6 +172,13 @@
       text-decoration: none;
     }
     .nav-logo span { color: var(--pink); }
+    .nav-brand { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .nav-tagline {
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400;
+      color: rgba(255,255,255,.6); letter-spacing: .02em; white-space: nowrap;
+      padding-left: 14px; border-left: 1px solid rgba(255,255,255,.18);
+    }
+    @media (max-width: 768px) { .nav-tagline { display: none; } }
     .nav-links {
       display: flex;
       align-items: center;
@@ -773,6 +780,8 @@
       margin-bottom: 10px;
     }
     .footer-brand-logo span { color: var(--pink); }
+    .footer-tagline { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(255,255,255,.72); letter-spacing: .02em; margin-bottom: 14px; }
+    .footer-narrative { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.6; max-width: 480px; margin-bottom: 20px; }
     .footer-brand p {
       font-size: 14px;
       color: var(--muted);
@@ -836,7 +845,10 @@
 <nav class="nav">
   <div class="container">
     <div class="nav-inner">
-      <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+      <div class="nav-brand">
+        <a href="/" class="nav-logo">Twirl<span>Power</span></a>
+        <span class="nav-tagline">Free for families. Always.</span>
+      </div>
       <div class="nav-links">
         <a href="/for-families" class="nav-link">For Families</a>
         <a href="/for-coaches" class="nav-link">For Coaches</a>
@@ -844,6 +856,7 @@
         <a href="#competitions" class="nav-link">Competitions</a>
         <a href="https://directory.twirlpower.com" class="nav-link">Directory</a>
         <a href="/news" class="nav-link">News</a>
+        <a href="/about" class="nav-link">About</a>
       </div>
       <a href="/beta" class="nav-cta">Join Beta →</a>
       <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
@@ -1192,7 +1205,8 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="footer-brand-logo">Twirl<span>Power</span></div>
-        <p>The home base for competitive baton twirling families, coaches, and competition directors.</p>
+        <div class="footer-tagline">Free for families. Always.</div>
+        <p class="footer-narrative">TwirlPower will always be free for families. Built by a twirling family, for twirling families.</p>
         <a href="/beta" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">
           Join Beta →
         </a>
@@ -1203,6 +1217,7 @@
         <a href="/for-coaches">For Coaches</a>
         <a href="/for-directors">For Directors</a>
         <a href="/news">News & Updates</a>
+        <a href="/about">About</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-head">Directory</div>
