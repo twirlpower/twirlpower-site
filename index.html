@@ -1271,20 +1271,23 @@
   // ── Live stats from Supabase
   const SUPABASE_URL = 'https://fascxnrrnsknjnojfxvv.supabase.co';
 
-  async function fetchCount(table, params = {}) {
-    const q = new URLSearchParams(params).toString();
-    const url = `${SUPABASE_URL}/rest/v1/${table}?${q}`;
-    const res = await fetch(url, {
+  // Public counts come from the get_public_stats() SECURITY DEFINER RPC so this
+  // page never needs anon SELECT on family_accounts / twirlers — those are locked
+  // down for privacy (see migrations/2026-06-05_rls_*_anon.sql) and direct anon
+  // counts now return 0. The RPC returns only aggregate counts, no row data.
+  async function fetchPublicStats() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_public_stats`, {
+      method: 'POST',
       headers: {
         apikey: window.TWIRLPOWER_ANON_KEY,
         Authorization: `Bearer ${window.TWIRLPOWER_ANON_KEY}`,
-        Prefer: 'count=exact',
-        Range: '0-0',
-      }
+        'Content-Type': 'application/json',
+      },
+      body: '{}',
     });
-    const range = res.headers.get('content-range') ?? '';
-    const total = range.split('/')[1];
-    return total === '*' ? 0 : parseInt(total, 10) || 0;
+    if (!res.ok) throw new Error('stats ' + res.status);
+    const rows = await res.json();
+    return Array.isArray(rows) ? rows[0] : rows;
   }
 
   function animateCount(el, target, duration = 1200) {
@@ -1300,14 +1303,10 @@
 
   async function loadStats() {
     try {
-      const [families, twirlers, competitions] = await Promise.all([
-        fetchCount('family_accounts'),
-        fetchCount('twirlers'),
-        fetchCount('public_competitions', { show_on_marketing_site: 'eq.true' }),
-      ]);
-      animateCount(document.getElementById('stat-families'),     families,     1000);
-      animateCount(document.getElementById('stat-twirlers'),     twirlers,     1200);
-      animateCount(document.getElementById('stat-competitions'), competitions, 800);
+      const s = await fetchPublicStats();
+      animateCount(document.getElementById('stat-families'),     Number(s?.families)     || 0, 1000);
+      animateCount(document.getElementById('stat-twirlers'),     Number(s?.twirlers)     || 0, 1200);
+      animateCount(document.getElementById('stat-competitions'), Number(s?.competitions) || 0, 800);
     } catch (e) {
       console.warn('TwirlPower stats error:', e);
     }
