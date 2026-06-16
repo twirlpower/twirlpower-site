@@ -118,39 +118,7 @@
 </head>
 <body>
 
-<nav class="nav">
-  <div class="container">
-    <div class="nav-inner">
-      <div class="nav-brand">
-        <a href="/" class="nav-logo">Twirl<span>Power</span></a>
-        <span class="nav-tagline">Free for families. Always.</span>
-      </div>
-      <div class="nav-links">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/for-families" class="nav-link">For Families</a>
-        <a href="/for-coaches" class="nav-link">For Coaches</a>
-        <a href="/for-directors" class="nav-link">For Directors</a>
-        <a href="https://directory.twirlpower.com" class="nav-link">Directory</a>
-        <a href="/news" class="nav-link active">News</a>
-        <a href="/about" class="nav-link">About</a>
-      </div>
-      <a href="https://app.twirlpower.com" class="nav-cta" target="_blank">Open App →</a>
-      <button class="nav-mobile-btn" onclick="document.getElementById('mob').classList.toggle('open')" aria-label="Menu">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-    </div>
-  </div>
-  <div class="nav-mobile-menu" id="mob">
-    <a href="/">Home</a>
-    <a href="/for-families">For Families</a>
-    <a href="/for-coaches">For Coaches</a>
-    <a href="/for-directors">For Directors</a>
-    <a href="https://directory.twirlpower.com">Directory</a>
-    <a href="/news">News</a>
-    <a href="/about">About</a>
-    <a href="https://app.twirlpower.com" style="color:var(--teal);font-weight:700;" target="_blank">Open App →</a>
-  </div>
-</nav>
+<header id="site-header"></header>
 
 <div class="hero">
   <div class="container">
@@ -174,45 +142,7 @@
   </div>
 </div>
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-brand-logo">Twirl<span>Power</span></div>
-        <div class="footer-tagline">Free for families. Always.</div>
-        <p class="footer-narrative">TwirlPower will always be free for families. Built by a twirling family, for twirling families.</p>
-        <a href="https://app.twirlpower.com" target="_blank" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Open App →</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-head">Product</div>
-        <a href="/for-families">For Families</a>
-        <a href="/for-coaches">For Coaches</a>
-        <a href="/for-directors">For Directors</a>
-        <a href="/news">News &amp; Updates</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-head">Directory</div>
-        <a href="https://directory.twirlpower.com/coaches">Find a Coach</a>
-        <a href="https://directory.twirlpower.com/clubs">Clubs</a>
-        <a href="https://directory.twirlpower.com/competitions">Competitions</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-head">Organizations</div>
-        <a href="https://ustwirling.com" target="_blank">USTA</a>
-        <a href="https://www.nbtainternational.com" target="_blank">NBTA</a>
-        <a href="https://www.twirlingunlimited.com" target="_blank">TU</a>
-        <a href="https://www.dmatwirl.org" target="_blank">DMA</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 TwirlPower, a dba of OAKRAA, LLC (Colorado)</span>
-      <span>
-        <a href="/privacy" style="color:var(--muted);margin-right:16px;transition:color .15s;">Privacy Policy</a>
-        <a href="/terms" style="color:var(--muted);transition:color .15s;">Terms</a>
-      </span>
-    </div>
-  </div>
-</footer>
+<footer id="site-footer"></footer>
 
 <script>
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -280,5 +210,7 @@
   });
 </script>
 
+  <script src="/header.js"></script>
+  <script src="/footer.js"></script>
 </body>
 </html>
