@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
             '<a href="https://www.nbtainternational.com" target="_blank" rel="noopener">NBTA</a>' +
             '<a href="https://www.twirlingunlimited.com" target="_blank" rel="noopener">TU</a>' +
             '<a href="https://www.dmatwirl.org" target="_blank" rel="noopener">DMA</a>' +
+            '<a href="https://www.aausports.org/baton-twirling" target="_blank" rel="noopener">AAU</a>' +
+            '<a href="https://worldtwirling.cc" target="_blank" rel="noopener">WTA</a>' +
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
