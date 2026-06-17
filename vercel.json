@@ -1,6 +1,12 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/favicon.ico", "destination": "/favicons/favicon.ico" },
+    { "source": "/favicon-16.png", "destination": "/favicons/favicon-16.png" },
+    { "source": "/favicon-32.png", "destination": "/favicons/favicon-32.png" },
+    { "source": "/apple-touch-icon.png", "destination": "/favicons/apple-touch-icon.png" }
+  ],
   "redirects": [
     {
       "source": "/beta",
