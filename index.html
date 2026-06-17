@@ -79,11 +79,6 @@
       50%  { transform: translateY(-12px) rotate(-20deg); }
       100% { transform: translateY(0px) rotate(-35deg); }
     }
-    @keyframes batonSpin {
-      0%   { transform: translateY(0px) rotate(0deg); }
-      50%  { transform: translateY(-12px) rotate(180deg); }
-      100% { transform: translateY(0px) rotate(360deg); }
-    }
     @keyframes spinSlow {
       to { transform: rotate(360deg); }
     }
@@ -357,11 +352,32 @@
       justify-content: center;
       z-index: 3;
     }
-    .baton-svg {
-      width: 160px;
-      height: 160px;
-      animation: batonSpin 8s linear infinite;
-    }
+    .hero-baton-stage{position:relative;width:240px;height:240px;display:flex;align-items:flex-end;justify-content:center;overflow:visible}
+    .hero-baton-shadow{position:absolute;bottom:20px;left:calc(50% - 60px);width:120px;height:14px;border-radius:50%;
+      background:radial-gradient(ellipse at center,rgba(15,23,42,.35),rgba(15,23,42,0) 70%);
+      animation:hero-baton-shadow 3.2s cubic-bezier(.45,0,.55,1) infinite}
+    .hero-baton-toss{position:absolute;bottom:28px;left:calc(50% - 90px);width:180px;
+      animation:hero-baton-toss 3.2s cubic-bezier(.4,0,.6,1) infinite}
+    .hero-baton{display:flex;align-items:center;justify-content:center;width:180px;height:36px;
+      transform-origin:50% 50%;animation:hero-baton-twirl 3.2s linear infinite;
+      filter:drop-shadow(0 2px 4px rgba(15,23,42,.22))}
+    .hero-baton-shaft{flex:1 1 auto;height:5px;margin:0 -3px;border-radius:3px;
+      background:linear-gradient(to bottom,#e9ebee,#c2c6cd 18%,#8f949c 50%,#c2c6cd 82%,#eef0f2)}
+    .hero-baton-cup-mouth{flex:0 0 auto;width:9px;height:36px;border-radius:50%}
+    .hero-baton-cup-mouth.left{background:radial-gradient(circle at 62% 36%,#fff,#e8eaed 55%,#c2c5cb)}
+    .hero-baton-cup-mouth.right{background:radial-gradient(circle at 38% 36%,#fff,#e8eaed 55%,#c2c5cb)}
+    .hero-baton-cup-flare{flex:0 0 auto;width:20px;height:36px;
+      background:linear-gradient(to bottom,#e11d6a,#c0185a 40%,#9b1349)}
+    .hero-baton-cup-flare.left{margin-left:-4px;clip-path:polygon(0 1%,100% 35%,100% 65%,0 99%)}
+    .hero-baton-cup-flare.right{margin-right:-4px;clip-path:polygon(0 35%,100% 1%,100% 99%,0 65%)}
+    @keyframes hero-baton-twirl{0%{transform:rotate(0)}14%{transform:rotate(110deg)}27%{transform:rotate(360deg)}
+      39%{transform:rotate(740deg)}50%{transform:rotate(1080deg)}61%{transform:rotate(1420deg)}
+      73%{transform:rotate(1800deg)}86%{transform:rotate(2050deg)}100%{transform:rotate(2160deg)}}
+    @keyframes hero-baton-toss{0%,27%{transform:translateY(0)}33%{transform:translateY(-48px)}40%{transform:translateY(-90px)}
+      46%{transform:translateY(-114px)}50%{transform:translateY(-122px)}54%{transform:translateY(-114px)}
+      60%{transform:translateY(-90px)}67%{transform:translateY(-48px)}73%,100%{transform:translateY(0)}}
+    @keyframes hero-baton-shadow{0%,27%{transform:scaleX(1);opacity:.3}
+      50%{transform:scaleX(.4);opacity:.07}73%,100%{transform:scaleX(1);opacity:.3}}
 
     /* App preview card */
     .app-preview {
@@ -880,21 +896,18 @@
           <div class="baton-ring"></div>
           <div class="baton-ring baton-ring-2"></div>
           <div class="baton-inner">
-            <!-- Baton SVG -->
-            <svg class="baton-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Tip 1 outline -->
-              <polygon points="27.733,65.290 17.415,66.925 25.695,77.522 29.777,67.907" fill="#0f172a"/>
-              <!-- Tip 1 pink -->
-              <polygon points="27.135,66.214 18.455,67.286 25.596,76.426 28.736,68.263" fill="#e11d6a"/>
-              <!-- Tip 2 outline -->
-              <polygon points="70.223,32.093 74.305,22.478 82.585,33.075 72.267,34.710" fill="#0f172a"/>
-              <!-- Tip 2 pink -->
-              <polygon points="71.264,31.737 74.404,23.574 81.545,32.714 72.865,33.786" fill="#e11d6a"/>
-              <!-- White rod on top -->
-              <polygon points="27.074,66.135 28.798,68.342 72.926,33.865 71.202,31.658" fill="#ffffff" opacity=".95"/>
-            </svg>
-              </g>
-            </svg>
+            <div class="hero-baton-stage">
+              <div class="hero-baton-shadow"></div>
+              <div class="hero-baton-toss">
+                <div class="hero-baton">
+                  <span class="hero-baton-cup-mouth left"></span>
+                  <span class="hero-baton-cup-flare left"></span>
+                  <span class="hero-baton-shaft"></span>
+                  <span class="hero-baton-cup-flare right"></span>
+                  <span class="hero-baton-cup-mouth right"></span>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- App preview overlay -->
           <div style="position:absolute;bottom:-100px;right:-60px;z-index:2;">
