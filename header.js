@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
     ['/for-families', 'For Families'],
     ['/for-coaches', 'For Coaches'],
     ['/for-directors', 'For Directors'],
-    ['/#competitions', 'Competitions'],
     ['https://directory.twirlpower.com', 'Directory'],
     ['/news', 'News'],
     ['/about', 'About']
