@@ -260,7 +260,7 @@
       <p class="section-sub">Finding competitions in TwirlPower is the fastest way to get your twirler's season on record. The directory shows verified upcoming competitions you can save directly to your schedule.</p>
     </div>
     <div style="text-align:center; margin: 0 auto 32px; max-width:520px;">
-      <img src="img/Illustration-1-Find-a-Competition.png" alt="Browse and save competitions from the TwirlPower directory" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15);">
+      <img src="img/Illustration-1-Find-a-Competition.png" alt="Browse and save competitions from the TwirlPower directory" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15); cursor:pointer;" onclick="openLightbox(this.src, this.alt)">
     </div>
     <div class="howto-body">
       <div class="step-list">
@@ -282,7 +282,7 @@
       <p class="section-sub">If your competition isn't listed yet, you can add it yourself. Name, date, and organization are the only required fields.</p>
     </div>
     <div style="text-align:center; margin: 0 auto 32px; max-width:520px;">
-      <img src="img/Illustration-2-Add-Competition.png" alt="Manually add a competition using the Add Competition form" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15);">
+      <img src="img/Illustration-2-Add-Competition.png" alt="Manually add a competition using the Add Competition form" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15); cursor:pointer;" onclick="openLightbox(this.src, this.alt)">
     </div>
     <div class="howto-body">
       <div class="note">Can't find your competition in the directory? From the <strong>Find</strong> screen, scroll past the results and tap <strong>"Add it manually →"</strong> to open this form.</div>
@@ -310,7 +310,7 @@
       <p class="section-sub">Once a competition is on your schedule, add the specific events your twirler is entered in. You can do this before the competition or on the day.</p>
     </div>
     <div style="text-align:center; margin: 0 auto 32px; max-width:520px;">
-      <img src="img/Illustration-3-Add-Event.png" alt="Add events to a competition using the Add Event modal" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15);">
+      <img src="img/Illustration-3-Add-Event.png" alt="Add events to a competition using the Add Event modal" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15); cursor:pointer;" onclick="openLightbox(this.src, this.alt)">
     </div>
     <div class="howto-body">
       <div class="step-list">
@@ -336,7 +336,7 @@
       <p class="section-sub">Results can be entered during the competition or after. There are three ways to get there.</p>
     </div>
     <div style="text-align:center; margin: 0 auto 32px; max-width:520px;">
-      <img src="img/Illustration-4-Entering-Results.png" alt="Three ways to enter results: from the list, dashboard, or schedule" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15);">
+      <img src="img/Illustration-4-Entering-Results.png" alt="Three ways to enter results: from the list, dashboard, or schedule" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15); cursor:pointer;" onclick="openLightbox(this.src, this.alt)">
     </div>
     <div class="howto-body">
       <h3 style="font-size:18px;color:var(--navy);margin:0 0 6px;">From My Competitions</h3>
@@ -349,7 +349,7 @@
       <p class="step-text" style="max-width:720px;">From the <strong>Schedule</strong> page on competition day, tap the <strong>TwirlTracker</strong> tab when it appears. Log each result live as your twirler competes.</p>
 
       <div style="text-align:center; margin: 0 auto 32px; max-width:520px;">
-        <img src="img/Illustration-5-TwirlTracker.png" alt="TwirlTracker live results screen on competition day" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15);">
+        <img src="img/Illustration-5-TwirlTracker.png" alt="TwirlTracker live results screen on competition day" style="width:100%; border-radius:24px; box-shadow: 0 12px 40px -8px rgba(15,23,42,0.15); cursor:pointer;" onclick="openLightbox(this.src, this.alt)">
       </div>
 
       <div class="note"><strong>Competition day tip:</strong> TwirlTracker is built for the gym floor. Open it from your Schedule page and log each result as it happens — no hunting through menus.</div>
@@ -394,5 +394,22 @@
 </script>
   <script src="/header.js"></script>
   <script src="/footer.js"></script>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="this.style.display='none'" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.92); z-index:9999; cursor:zoom-out; padding:24px; box-sizing:border-box; align-items:center; justify-content:center;">
+  <img id="lightbox-img" src="" alt="" style="max-width:100%; max-height:100%; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,0.5); object-fit:contain;">
+</div>
+<script>
+function openLightbox(src, alt) {
+  var lb = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+  img.src = src;
+  img.alt = alt;
+  lb.style.display = 'flex';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('lightbox').style.display = 'none';
+});
+</script>
 </body>
 </html>
