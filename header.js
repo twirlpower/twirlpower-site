@@ -15,8 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }',
       '.nav { position: sticky; top: 0; z-index: 200; background: rgba(15,23,42,.96); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.07); }',
       '.nav-inner { display: flex; align-items: center; height: 62px; gap: 32px; }',
-      ".nav-logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: #fff; flex-shrink: 0; text-decoration: none; }",
-      '.nav-logo span { color: var(--pink, #e11d6a); }',
+      '.nav-logo { flex-shrink: 0; text-decoration: none; display: flex; align-items: center; }',
       '.nav-brand { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }',
       ".nav-tagline { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400; color: rgba(255,255,255,.6); letter-spacing: .02em; white-space: nowrap; padding-left: 14px; border-left: 1px solid rgba(255,255,255,.18); }",
       '.nav-links { display: flex; align-items: center; gap: 4px; flex: 1; }',
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="container">' +
         '<div class="nav-inner">' +
           '<div class="nav-brand">' +
-            '<a href="/" class="nav-logo">Twirl<span>Power</span></a>' +
+            '<a href="/" class="nav-logo"><img src="/img/twirlpower-logo-primary.png" alt="TwirlPower" style="width:110px;height:auto;display:block" /></a>' +
             '<span class="nav-tagline">Free for families. Always.</span>' +
           '</div>' +
           '<div class="nav-links">' + navLinks + '</div>' +

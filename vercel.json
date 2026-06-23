@@ -5,7 +5,8 @@
     { "source": "/favicon.ico", "destination": "/favicons/favicon.ico" },
     { "source": "/favicon-16.png", "destination": "/favicons/favicon-16.png" },
     { "source": "/favicon-32.png", "destination": "/favicons/favicon-32.png" },
-    { "source": "/apple-touch-icon.png", "destination": "/favicons/apple-touch-icon.png" }
+    { "source": "/apple-touch-icon.png", "destination": "/favicons/apple-touch-icon.png" },
+    { "source": "/og-default.png", "destination": "/favicons/og-default.png" }
   ],
   "redirects": [
     {

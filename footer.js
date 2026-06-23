@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }',
       '.footer { background: var(--navy, #0f172a); border-top: 1px solid rgba(255,255,255,.07); padding: 56px 0 32px; }',
       '.footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.07); }',
-      ".footer-brand-logo { font-family: 'DM Serif Display', serif; font-size: 24px; color: #fff; margin-bottom: 10px; }",
-      '.footer-brand-logo span { color: var(--pink, #e11d6a); }',
+      '.footer-brand-logo { margin-bottom: 10px; }',
       ".footer-tagline { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(255,255,255,.72); letter-spacing: .02em; margin-bottom: 14px; }",
       '.footer-narrative { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.6; max-width: 480px; margin-bottom: 20px; }',
       '.footer-col-head { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; margin-bottom: 16px; }',
@@ -32,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="container">' +
         '<div class="footer-inner">' +
           '<div class="footer-brand">' +
-            '<div class="footer-brand-logo">Twirl<span>Power</span></div>' +
+            '<div class="footer-brand-logo"><img src="/img/twirlpower-logo-primary.png" alt="TwirlPower" style="width:125px;height:auto;display:block" /></div>' +
             '<div class="footer-tagline">Free for families. Always.</div>' +
             '<p class="footer-narrative">TwirlPower will always be free for families. Built by a twirling family, for twirling families.</p>' +
             '<a href="https://app.twirlpower.com" style="display:inline-block;background:var(--teal,#0d9488);color:#fff;font-size:13px;font-weight:700;padding:9px 18px;border-radius:8px;text-decoration:none;">Open App →</a>' +
